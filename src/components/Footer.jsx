@@ -13,7 +13,9 @@ import {
 
 import { useLanguage } from "../context/LanguageContext";
 
-/* SOCIAL ICONS */
+// ==========================================
+// SOCIAL ICONS
+// ==========================================
 
 const FacebookIcon = () => (
   <svg
@@ -39,13 +41,7 @@ const InstagramIcon = () => (
   >
     <rect x="2" y="2" width="20" height="20" rx="5" />
     <circle cx="12" cy="12" r="4" />
-    <circle
-      cx="18"
-      cy="6"
-      r="1"
-      fill="currentColor"
-      stroke="none"
-    />
+    <circle cx="18" cy="6" r="1" fill="currentColor" stroke="none" />
   </svg>
 );
 
@@ -71,7 +67,10 @@ const YoutubeIcon = () => (
   </svg>
 );
 
+// ==========================================
 // ENGLISH + MARATHI TRANSLATIONS
+// ==========================================
+
 const translations = {
   en: {
     partnershipTitle:
@@ -96,9 +95,11 @@ const translations = {
       "Home",
       "About Us",
       "Our Programs",
+      "Courses",
       "Our Impact",
       "CSR & Partnerships",
       "Gallery",
+      "Donate",
       "Contact Us",
     ],
 
@@ -121,11 +122,8 @@ const translations = {
     socialComingSoon: "link coming soon",
     socialUnavailable: "link unavailable",
 
-    copyright:
-      "All Rights Reserved.",
-
-    developedBy:
-      "Designed & Developed by",
+    copyright: "All Rights Reserved.",
+    developedBy: "Designed & Developed by",
   },
 
   mr: {
@@ -151,9 +149,11 @@ const translations = {
       "मुख्यपृष्ठ",
       "आमच्याविषयी",
       "आमचे प्रशिक्षण कार्यक्रम",
+      "कोर्सेस",
       "आमचा प्रभाव",
       "CSR आणि भागीदारी",
       "फोटो गॅलरी",
+      "देणगी द्या",
       "संपर्क साधा",
     ],
 
@@ -176,33 +176,38 @@ const translations = {
     socialComingSoon: "लिंक लवकरच उपलब्ध होईल",
     socialUnavailable: "लिंक उपलब्ध नाही",
 
-    copyright:
-      "सर्व हक्क राखीव.",
-
-    developedBy:
-      "डिझाइन आणि डेव्हलपमेंट",
+    copyright: "सर्व हक्क राखीव.",
+    developedBy: "डिझाइन आणि डेव्हलपमेंट",
   },
 };
 
-// ROUTES REMAIN THE SAME IN BOTH LANGUAGES
+// ==========================================
+// ROUTES
+// ==========================================
+
 const quickLinkRoutes = [
   "/",
   "/about",
   "/programs",
+  "/courses",
   "/impact",
   "/csr",
   "/gallery",
+  "/donate",
   "/contact",
 ];
 
 const programRoutes = [
   "/programs#featured-gda",
-  "/programs",
-  "/programs",
-  "/programs",
+  "/courses#course-categories",
+  "/courses#course-categories",
+  "/courses#course-categories",
 ];
 
-// ADD OFFICIAL SOCIAL MEDIA URLs WHEN AVAILABLE
+// ==========================================
+// SOCIAL MEDIA LINKS
+// ==========================================
+
 const socialLinks = [
   {
     name: "Facebook",
@@ -226,7 +231,10 @@ const socialLinks = [
   },
 ];
 
-// FORMAT YEAR FOR ENGLISH / MARATHI
+// ==========================================
+// FORMAT YEAR
+// ==========================================
+
 const formatYear = (year, language) => {
   if (language !== "mr") {
     return String(year);
@@ -237,6 +245,10 @@ const formatYear = (year, language) => {
     (digit) => "०१२३४५६७८९"[Number(digit)]
   );
 };
+
+// ==========================================
+// FOOTER COMPONENT
+// ==========================================
 
 export default function Footer() {
   const { language } = useLanguage();
@@ -256,11 +268,15 @@ export default function Footer() {
         <div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-green-500/10 blur-[100px]" />
       </div>
 
+      {/* ===================================== */}
       {/* TOP PARTNERSHIP CTA */}
+      {/* ===================================== */}
+
       <div className="relative border-b border-white/10 bg-white/[0.045]">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
 
           <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/15 text-orange-400 sm:h-12 sm:w-12">
               <HeartHandshake className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
@@ -287,12 +303,18 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* ===================================== */}
       {/* MAIN FOOTER */}
+      {/* ===================================== */}
+
       <div className="relative mx-auto max-w-7xl px-5 pb-10 pt-12 sm:px-8 lg:px-10 lg:pt-14">
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
 
+          {/* ================================= */}
           {/* COLUMN 1 — FOUNDATION BRAND */}
+          {/* ================================= */}
+
           <div className="sm:col-span-2 lg:col-span-4">
 
             <Link
@@ -300,7 +322,6 @@ export default function Footer() {
               className="inline-flex max-w-full items-center gap-3"
               aria-label={t.brandHomeLabel}
             >
-              {/* LOGO */}
               <img
                 src="/logo.jpeg"
                 alt={t.logoAlt}
@@ -319,19 +340,16 @@ export default function Footer() {
               </div>
             </Link>
 
-            {/* FOUNDATION DESCRIPTION */}
             <p className="mt-5 max-w-sm text-sm leading-7 text-blue-100/80">
               {t.aboutDescription}
             </p>
 
-            {/* TAGLINE */}
             <p className="mt-4 text-sm font-semibold text-orange-300">
               {t.tagline}
             </p>
 
             {/* SOCIAL MEDIA */}
             <div className="mt-6 flex flex-wrap items-center gap-2.5">
-
               {socialLinks.map((social) => {
                 const Icon = social.icon;
 
@@ -357,19 +375,19 @@ export default function Footer() {
                   </span>
                 );
               })}
-
             </div>
           </div>
 
+          {/* ================================= */}
           {/* COLUMN 2 — QUICK LINKS */}
-          <div className="lg:col-span-2">
+          {/* ================================= */}
 
+          <div className="lg:col-span-2">
             <h3 className="mb-5 text-base font-bold text-white">
               {t.quickLinksHeading}
             </h3>
 
             <ul className="space-y-3">
-
               {t.quickLinks.map((name, index) => (
                 <li key={quickLinkRoutes[index]}>
                   <Link
@@ -381,19 +399,19 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-
             </ul>
           </div>
 
-          {/* COLUMN 3 — PROGRAMS */}
-          <div className="lg:col-span-3">
+          {/* ================================= */}
+          {/* COLUMN 3 — TRAINING AREAS */}
+          {/* ================================= */}
 
+          <div className="lg:col-span-3">
             <h3 className="mb-5 text-base font-bold text-white">
               {t.programsHeading}
             </h3>
 
             <ul className="space-y-3">
-
               {t.programs.map((program, index) => (
                 <li key={index}>
                   <Link
@@ -405,13 +423,14 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-
             </ul>
           </div>
 
+          {/* ================================= */}
           {/* COLUMN 4 — CONTACT */}
-          <div className="lg:col-span-3">
+          {/* ================================= */}
 
+          <div className="lg:col-span-3">
             <h3 className="mb-5 text-base font-bold text-white">
               {t.contactHeading}
             </h3>
@@ -437,7 +456,6 @@ export default function Footer() {
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-orange-400" />
 
                 <div className="flex flex-col gap-1">
-
                   <a
                     href="tel:+918830223458"
                     className="text-sm text-blue-100/80 transition-colors hover:text-orange-300"
@@ -468,16 +486,16 @@ export default function Footer() {
 
             </div>
           </div>
-
         </div>
       </div>
 
-      {/* BOTTOM COPYRIGHT BAR */}
-      <div className="relative border-t border-white/10 bg-[#04143C]">
+      {/* ===================================== */}
+      {/* COPYRIGHT BAR */}
+      {/* ===================================== */}
 
+      <div className="relative border-t border-white/10 bg-[#04143C]">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-6 text-center sm:px-8 lg:flex-row lg:gap-6 lg:px-10 lg:py-5 lg:text-left">
 
-          {/* COPYRIGHT */}
           <p className="text-xs leading-6 text-blue-100/70">
             © {formatYear(currentYear, language)}{" "}
             {language === "mr"
@@ -486,7 +504,6 @@ export default function Footer() {
             {t.copyright}
           </p>
 
-          {/* HASHGRID CREDIT */}
           <p className="text-xs leading-6 text-blue-100/70">
             {t.developedBy}{" "}
 
@@ -502,7 +519,6 @@ export default function Footer() {
 
         </div>
       </div>
-
     </footer>
   );
 }
