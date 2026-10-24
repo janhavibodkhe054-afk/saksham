@@ -189,7 +189,7 @@ const quickLinkRoutes = [
   "/",
   "/about",
   "/programs",
-  "/courses",
+  "/course",
   "/impact",
   "/csr",
   "/gallery",
