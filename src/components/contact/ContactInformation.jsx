@@ -37,7 +37,7 @@ const translations = {
       "Find our office in Chinchwad, Pune.",
 
     address:
-      "3rd Floor, Mayur Trade Centre, Phase 1, Chinchwad Station, Pune – 411019, Maharashtra.",
+      "5rd Floor, Mayur Trade Centre, Phase 1, Chinchwad Station, Pune – 411019, Maharashtra.",
 
     mapsButton: "View on Google Maps",
 
@@ -74,7 +74,7 @@ const translations = {
       "आमचे कार्यालय चिंचवड, पुणे येथे आहे.",
 
     address:
-      "तिसरा मजला, मयूर ट्रेड सेंटर, फेज १, चिंचवड स्टेशन, पुणे – ४११०१९, महाराष्ट्र.",
+      "5 मजला, मयूर ट्रेड सेंटर, फेज १, चिंचवड स्टेशन, पुणे – ४११०१९, महाराष्ट्र.",
 
     mapsButton: "गुगल मॅप्सवर पाहा",
 

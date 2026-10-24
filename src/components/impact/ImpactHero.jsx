@@ -51,7 +51,7 @@ export default function ImpactHero() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 -z-20">
         <img
-          src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1920&q=85"
+          src="/g43.jpeg"
           alt=""
           aria-hidden="true"
           className="h-full w-full object-cover object-center"

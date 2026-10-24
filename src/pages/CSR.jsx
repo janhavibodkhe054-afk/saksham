@@ -7,12 +7,14 @@ import FeaturedCSRProposal from '../components/csr/FeaturedCSRProposal'
 import CollaborationOpportunities from '../components/csr/CollaborationOpportunities'
 import MonitoringTransparency from '../components/csr/MonitoringTransparency'
 import CSREnquiryCTA from '../components/csr/CSREnquiryCTA'
+import CSRImplementationPartner from '../components/csr/CSRImplementationPartner'
 
 const CSR = () => {
   return (
     <div>
       <CSRPartnershipHero/>
       <WhyPartnerSection/>
+      <CSRImplementationPartner/>
       <CSRCapabilitiesSection/>
       {/* <CSRFocusAreas/> */}
       <FeaturedCSRProposal/>

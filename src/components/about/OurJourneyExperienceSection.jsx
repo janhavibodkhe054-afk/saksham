@@ -149,7 +149,7 @@ export default function OurJourneyExperienceSection() {
             <div className="relative mx-auto max-w-[420px] lg:max-w-none">
 
               <img
-                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=85"
+                src="/g20.jpeg"
                 alt={t.imageAlt}
                 loading="lazy"
                 decoding="async"

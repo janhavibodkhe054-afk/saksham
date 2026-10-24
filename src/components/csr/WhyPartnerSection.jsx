@@ -58,7 +58,7 @@ export default function WhyPartnerSection() {
               {/* MAIN IMAGE */}
               <div className="overflow-hidden rounded-2xl bg-slate-200">
                 <img
-                  src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=85"
+                  src="/c4.jpeg"
                   alt={t.mainImageAlt}
                   loading="lazy"
                   decoding="async"
@@ -69,7 +69,7 @@ export default function WhyPartnerSection() {
               {/* OVERLAPPING SECOND IMAGE */}
               <div className="absolute bottom-0 right-0 w-[53%] overflow-hidden rounded-2xl border-[6px] border-[#F5F8FC] bg-slate-200 shadow-[0_15px_35px_rgba(6,27,80,0.12)]">
                 <img
-                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=85"
+                  src="/c1.jpeg"
                   alt={t.secondaryImageAlt}
                   loading="lazy"
                   decoding="async"

@@ -99,7 +99,7 @@ export default function WhoWeAreSection() {
               {/* MAIN IMAGE */}
               <div className="absolute left-0 top-0 h-[80%] w-[82%] overflow-hidden rounded-[28px] bg-slate-100 shadow-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=85"
+                  src="/g42.jpeg"
                   alt={t.mainImageAlt}
                   loading="lazy"
                   decoding="async"
@@ -110,7 +110,7 @@ export default function WhoWeAreSection() {
               {/* SECONDARY IMAGE */}
               <div className="absolute bottom-0 right-0 h-[52%] w-[55%] overflow-hidden rounded-[24px] border-[6px] border-white bg-slate-100 shadow-xl">
                 <img
-                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=85"
+                  src="/g36.jpeg"
                   alt={t.secondaryImageAlt}
                   loading="lazy"
                   decoding="async"

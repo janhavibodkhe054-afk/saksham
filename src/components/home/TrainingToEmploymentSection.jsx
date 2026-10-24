@@ -1,5 +1,6 @@
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import {
   Users,
   ClipboardCheck,
@@ -12,7 +13,10 @@ import {
 
 import { useLanguage } from "../../context/LanguageContext";
 
-// ENGLISH AND MARATHI CONTENT
+// ==========================================
+// ENGLISH + MARATHI TRANSLATIONS
+// ==========================================
+
 const translations = {
   en: {
     badge: "HOW WE WORK",
@@ -109,153 +113,559 @@ const translations = {
   },
 };
 
+// ==========================================
 // IMAGE AND ICON CONFIGURATION
-// Same images and icons for both languages.
+// ==========================================
+
 const stepStyles = [
   {
     number: "01",
     icon: Users,
     image:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=85",
+      "/c1.jpeg",
   },
   {
     number: "02",
     icon: ClipboardCheck,
     image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=85",
+      "/g42.jpeg",
   },
   {
     number: "03",
     icon: BookOpenCheck,
     image:
-      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=85",
+      "/g43.jpeg",
   },
   {
     number: "04",
     icon: Hospital,
     image:
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85",
+      "/g14.jpeg",
   },
   {
     number: "05",
     icon: BadgeCheck,
     image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=85",
+      "a3.jpeg",
   },
   {
     number: "06",
     icon: BriefcaseBusiness,
     image:
-      "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85",
+      "/g34.jpeg",
   },
 ];
 
+// ==========================================
+// SCROLL REVEAL HELPER
+// ==========================================
+
+function Reveal({
+  children,
+  direction = "up",
+  delay = 0,
+  duration = 900,
+  className = "",
+}) {
+  const elementRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (
+      reducedMotion ||
+      !("IntersectionObserver" in window)
+    ) {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.08,
+        rootMargin: "0px 0px 40px 0px",
+      }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const transforms = {
+    up: "translate3d(0, 45px, 0)",
+    left: "translate3d(-45px, 0, 0)",
+    right: "translate3d(45px, 0, 0)",
+    zoom: "scale(0.94)",
+  };
+
+  return (
+    <div
+      ref={elementRef}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible
+          ? "translate3d(0, 0, 0) scale(1)"
+          : transforms[direction] || transforms.up,
+        transitionProperty: "opacity, transform",
+        transitionDuration: `${duration}ms`,
+        transitionDelay: `${delay}ms`,
+        transitionTimingFunction:
+          "cubic-bezier(0.22, 1, 0.36, 1)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ==========================================
+// MAIN COMPONENT
+// ==========================================
+
 export default function TrainingToEmploymentSection() {
   const { language } = useLanguage();
+
   const t = translations[language] || translations.en;
 
   const formatNumber = (number) => {
-    if (language === "mr") {
-      return number.replace(/[0-9]/g, (digit) =>
-        "०१२३४५६७८९"[Number(digit)]
-      );
-    }
+    const value = String(number);
 
-    return number;
+    if (language !== "mr") return value;
+
+    return value.replace(
+      /[0-9]/g,
+      (digit) => "०१२३४५६७८९"[Number(digit)]
+    );
   };
 
   return (
     <section
       id="training-approach"
       aria-labelledby="training-approach-heading"
-      className="relative bg-[#FAF8F8] py-14 lg:py-20"
+      className="relative overflow-hidden bg-[#FAF8F8] py-14 lg:py-20"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* SUBTLE BACKGROUND GLOW */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+      >
+        <div className="training-bg-blue absolute -right-40 -top-40 h-80 w-80 rounded-full bg-blue-100/30 blur-3xl" />
 
+        <div className="training-bg-orange absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-orange-100/30 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        {/* ================================= */}
         {/* SECTION HEADING */}
-        <div className="mb-12 text-center">
-          <span className="mb-3 inline-block rounded-md bg-[#3156C9] px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
-            {t.badge}
-          </span>
+        {/* ================================= */}
 
-          <h2
-            id="training-approach-heading"
-            className="text-3xl font-extrabold leading-tight text-[#061B50] sm:text-4xl lg:text-5xl"
-          >
-            {t.heading1}{" "}
-            <span className="text-orange-600">
-              {t.heading2}
+        <div className="mb-12 text-center">
+
+          <Reveal direction="up" duration={850}>
+            <span className="training-badge mb-3 inline-block rounded-md bg-[#3156C9] px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white">
+              {t.badge}
             </span>
-          </h2>
+          </Reveal>
+
+          <Reveal
+            direction="up"
+            delay={100}
+            duration={1050}
+          >
+            <h2
+              id="training-approach-heading"
+              className="text-3xl font-extrabold leading-tight text-[#061B50] sm:text-4xl lg:text-5xl"
+            >
+              {t.heading1}{" "}
+
+              <span className="text-orange-600">
+                {t.heading2}
+              </span>
+            </h2>
+          </Reveal>
+
         </div>
 
+        {/* ================================= */}
         {/* SIX IMAGE CARDS */}
+        {/* ================================= */}
+
         <div className="grid grid-cols-1 gap-x-7 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+
           {stepStyles.map((step, index) => {
             const Icon = step.icon;
             const content = t.steps[index];
-            const number = formatNumber(step.number);
+
+            const number =
+              formatNumber(step.number);
 
             return (
-              <article
+              <Reveal
                 key={step.number}
-                className="group relative pb-2"
+                direction="up"
+                duration={900}
+                delay={(index % 3) * 130}
+                className="h-full"
               >
-                {/* IMAGE */}
-                <div className="relative h-[230px] overflow-hidden bg-slate-200 sm:h-[250px]">
-                  <img
-                    src={step.image}
-                    alt={content.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                <article className="training-card group relative h-full pb-2">
 
-                  {/* IMAGE LABEL */}
-                  <span className="absolute left-5 top-5 rounded-md bg-[#3156C9] px-4 py-2 text-xs font-bold uppercase text-white shadow-md">
-                    {content.category}
-                  </span>
-                </div>
+                  {/* ======================== */}
+                  {/* IMAGE CONTAINER */}
+                  {/* ======================== */}
 
-                {/* OVERLAPPING WHITE CARD */}
-                <div className="relative z-10 -mt-12 mx-auto flex min-h-[220px] w-[88%] flex-col rounded-md bg-white px-6 py-6 shadow-[0_15px_40px_rgba(6,27,80,0.07)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_20px_45px_rgba(6,27,80,0.12)]">
+                  <div className="training-image-frame relative h-[230px] overflow-hidden bg-slate-200 sm:h-[250px]">
 
-                  {/* STEP LABEL */}
-                  <p className="mb-2 text-xs font-medium text-slate-500">
-                    {t.stepLabel} {number}
-                  </p>
+                    {/* IMAGE */}
+                    <img
+                      src={step.image}
+                      alt={content.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="training-card-image h-full w-full object-cover"
+                    />
 
-                  {/* TITLE */}
-                  <h3 className="text-xl font-bold leading-snug text-[#202B42]">
-                    {content.title}
-                  </h3>
+                    {/* IMAGE MIRROR SHINE */}
+                    <span
+                      aria-hidden="true"
+                      className="training-image-shine pointer-events-none absolute inset-0"
+                    />
 
-                  {/* DESCRIPTION */}
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
-                    {content.description}
-                  </p>
+                    {/* SUBTLE IMAGE OVERLAY */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#061B50]/10 to-transparent"
+                    />
 
-                  {/* CARD FOOTER */}
-                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+                    {/* IMAGE CATEGORY BADGE */}
+                    <span className="training-category-badge absolute left-5 top-5 rounded-md bg-[#3156C9] px-4 py-2 text-xs font-bold uppercase text-white shadow-md">
+                      {content.category}
+                    </span>
 
-                    <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                      <Icon className="h-4 w-4 shrink-0 text-[#3156C9]" />
+                  </div>
 
-                      <span>
-                        {t.stepLabel} {number}{" "}
-                        {t.ofLabel} {formatNumber("06")}
-                      </span>
-                    </div>
+                  {/* ======================== */}
+                  {/* OVERLAPPING WHITE CARD */}
+                  {/* ======================== */}
 
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#3156C9] transition-all duration-300 group-hover:bg-[#3156C9] group-hover:text-white">
-                      <ArrowRight className="h-4 w-4" />
+                  <div className="training-info-card relative z-10 -mt-12 mx-auto flex min-h-[220px] w-[88%] flex-col overflow-hidden rounded-md bg-white px-6 py-6 shadow-[0_15px_40px_rgba(6,27,80,0.07)]">
+
+                    {/* CARD SHINE */}
+                    <span
+                      aria-hidden="true"
+                      className="training-card-shine pointer-events-none absolute inset-0"
+                    />
+
+                    {/* STEP LABEL */}
+                    <p className="relative z-10 mb-2 text-xs font-medium text-slate-500">
+                      {t.stepLabel} {number}
+                    </p>
+
+                    {/* TITLE */}
+                    <h3 className="relative z-10 text-xl font-bold leading-snug text-[#202B42]">
+                      {content.title}
+                    </h3>
+
+                    {/* DESCRIPTION */}
+                    <p className="relative z-10 mt-3 flex-1 text-sm leading-relaxed text-slate-600">
+                      {content.description}
+                    </p>
+
+                    {/* CARD FOOTER */}
+                    <div className="relative z-10 mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+
+                      <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+
+                        <Icon className="training-footer-icon h-4 w-4 shrink-0 text-[#3156C9]" />
+
+                        <span>
+                          {t.stepLabel} {number}{" "}
+                          {t.ofLabel} {formatNumber("06")}
+                        </span>
+                      </div>
+
+                      <div className="training-arrow flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#3156C9]">
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
+
                     </div>
                   </div>
-                </div>
-              </article>
+
+                </article>
+              </Reveal>
             );
           })}
+
         </div>
+
       </div>
+
+      {/* ================================= */}
+      {/* ALL ANIMATIONS INSIDE THIS FILE */}
+      {/* ================================= */}
+
+      <style>{`
+        /* ============================
+           BACKGROUND FLOAT
+        ============================ */
+
+        @keyframes trainingBgBlue {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+
+          50% {
+            transform: translate(-35px, 20px);
+          }
+        }
+
+        @keyframes trainingBgOrange {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+
+          50% {
+            transform: translate(35px, -20px);
+          }
+        }
+
+        #training-approach .training-bg-blue {
+          animation: trainingBgBlue 12s
+            ease-in-out infinite;
+        }
+
+        #training-approach .training-bg-orange {
+          animation: trainingBgOrange 14s
+            ease-in-out infinite;
+        }
+
+        /* ============================
+           HEADING BADGE GLOW
+        ============================ */
+
+        @keyframes trainingBadgeGlow {
+          0%, 100% {
+            box-shadow: 0 0 0 rgba(49,86,201,0);
+          }
+
+          50% {
+            box-shadow: 0 0 22px rgba(49,86,201,0.18);
+          }
+        }
+
+        #training-approach .training-badge {
+          animation: trainingBadgeGlow 3.5s
+            ease-in-out infinite;
+        }
+
+        /* ============================
+           IMAGE HOVER ZOOM
+        ============================ */
+
+        #training-approach .training-card-image {
+          transition: transform 950ms
+            cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #training-approach .training-card:hover
+        .training-card-image {
+          transform: scale(1.1);
+        }
+
+        /* ============================
+           IMAGE MIRROR SHINE
+        ============================ */
+
+        .training-image-shine {
+          background: linear-gradient(
+            115deg,
+            transparent 22%,
+            rgba(255,255,255,0.03) 35%,
+            rgba(255,255,255,0.3) 47%,
+            rgba(255,255,255,0.55) 50%,
+            rgba(255,255,255,0.16) 56%,
+            transparent 70%
+          );
+
+          transform: translateX(-170%);
+          opacity: 0;
+        }
+
+        #training-approach .training-card:hover
+        .training-image-shine {
+          animation: trainingImageMirror 1050ms
+            cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes trainingImageMirror {
+          0% {
+            opacity: 0;
+            transform: translateX(-170%);
+          }
+
+          25% {
+            opacity: 1;
+          }
+
+          85% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+            transform: translateX(170%);
+          }
+        }
+
+        /* ============================
+           CATEGORY BADGE ENTRANCE
+        ============================ */
+
+        #training-approach .training-category-badge {
+          transition:
+            transform 500ms ease,
+            box-shadow 500ms ease;
+        }
+
+        #training-approach .training-card:hover
+        .training-category-badge {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 24px rgba(49,86,201,0.25);
+        }
+
+        /* ============================
+           WHITE CONTENT CARD HOVER
+        ============================ */
+
+        #training-approach .training-info-card {
+          transition:
+            transform 450ms
+              cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 450ms ease;
+        }
+
+        #training-approach .training-card:hover
+        .training-info-card {
+          transform: translateY(-8px);
+          box-shadow:
+            0 25px 55px rgba(6,27,80,0.15);
+        }
+
+        /* ============================
+           WHITE CARD SHINE
+        ============================ */
+
+        .training-card-shine {
+          background: linear-gradient(
+            115deg,
+            transparent 25%,
+            rgba(255,255,255,0.06) 38%,
+            rgba(226,232,240,0.55) 50%,
+            rgba(255,255,255,0.06) 62%,
+            transparent 75%
+          );
+
+          transform: translateX(-160%);
+          opacity: 0;
+        }
+
+        #training-approach .training-card:hover
+        .training-card-shine {
+          animation: trainingWhiteCardShine 950ms
+            ease-out both;
+        }
+
+        @keyframes trainingWhiteCardShine {
+          0% {
+            opacity: 0;
+            transform: translateX(-160%);
+          }
+
+          25% {
+            opacity: 0.8;
+          }
+
+          100% {
+            opacity: 0;
+            transform: translateX(160%);
+          }
+        }
+
+        /* ============================
+           FOOTER ICON HOVER
+        ============================ */
+
+        #training-approach .training-footer-icon {
+          transition: transform 400ms ease;
+        }
+
+        #training-approach .training-card:hover
+        .training-footer-icon {
+          transform: rotate(-12deg) scale(1.12);
+        }
+
+        /* ============================
+           ARROW HOVER ANIMATION
+        ============================ */
+
+        #training-approach .training-arrow {
+          transition:
+            background-color 350ms ease,
+            color 350ms ease,
+            transform 350ms ease;
+        }
+
+        #training-approach .training-card:hover
+        .training-arrow {
+          background-color: #3156C9;
+          color: #FFFFFF;
+          transform: rotate(-45deg);
+        }
+
+        #training-approach .training-arrow svg {
+          transition: transform 350ms ease;
+        }
+
+        #training-approach .training-card:hover
+        .training-arrow svg {
+          transform: translateX(2px);
+        }
+
+        /* ============================
+           REDUCED MOTION
+        ============================ */
+
+        @media (prefers-reduced-motion: reduce) {
+          #training-approach .training-bg-blue,
+          #training-approach .training-bg-orange,
+          #training-approach .training-badge,
+          #training-approach .training-image-shine,
+          #training-approach .training-card-shine {
+            animation: none !important;
+          }
+
+          #training-approach .training-card-image,
+          #training-approach .training-info-card,
+          #training-approach .training-arrow {
+            transition: none !important;
+          }
+        }
+      `}</style>
+
     </section>
   );
 }

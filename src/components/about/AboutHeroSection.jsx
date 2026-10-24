@@ -49,7 +49,7 @@ export default function AboutHeroSection() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1920&q=85"
+          src="/g2.jpeg"
           alt=""
           aria-hidden="true"
           fetchPriority="high"

@@ -73,7 +73,7 @@ export default function CommunityMobilization() {
               {/* MAIN IMAGE */}
               <div className="group overflow-hidden rounded-2xl bg-slate-200 shadow-[0_15px_40px_rgba(6,27,80,0.08)]">
                 <img
-                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1100&q=85"
+                  src="/c2.jpeg"
                   alt={t.imageAlt}
                   loading="lazy"
                   decoding="async"

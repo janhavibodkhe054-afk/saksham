@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Phone,
   Mail,
@@ -9,6 +10,8 @@ import {
   GraduationCap,
   HeartHandshake,
 } from "lucide-react";
+
+import { useLanguage } from "../context/LanguageContext";
 
 /* SOCIAL ICONS */
 
@@ -36,7 +39,13 @@ const InstagramIcon = () => (
   >
     <rect x="2" y="2" width="20" height="20" rx="5" />
     <circle cx="12" cy="12" r="4" />
-    <circle cx="18" cy="6" r="1" fill="currentColor" stroke="none" />
+    <circle
+      cx="18"
+      cy="6"
+      r="1"
+      fill="currentColor"
+      stroke="none"
+    />
   </svg>
 );
 
@@ -62,32 +71,177 @@ const YoutubeIcon = () => (
   </svg>
 );
 
-const quickLinks = [
-  { name: "Home", href: "/" },
-  { name: "About Us", href: "/about" },
-  { name: "Our Programs", href: "/programs" },
-  { name: "Our Impact", href: "/impact" },
-  { name: "CSR & Partnerships", href: "/csr" },
-  { name: "Gallery", href: "/gallery" },
-  { name: "Contact Us", href: "/contact" },
+// ENGLISH + MARATHI TRANSLATIONS
+const translations = {
+  en: {
+    partnershipTitle:
+      "Together, We Can Create Opportunities.",
+    partnershipDescription:
+      "Partner with us to empower youth and women through skills.",
+    partnershipButton: "Partner With Us",
+
+    brandHomeLabel: "Saksham Foundation Home",
+    brandName1: "SAKSHAM",
+    brandName2: "FOUNDATION",
+    logoAlt: "Saksham Foundation Logo",
+
+    aboutDescription:
+      "Saksham Foundation is dedicated to empowering youth and women through skill development, vocational education, healthcare training and sustainable livelihood opportunities.",
+
+    tagline:
+      "Empowering Lives Through Skill Development.",
+
+    quickLinksHeading: "Quick Links",
+    quickLinks: [
+      "Home",
+      "About Us",
+      "Our Programs",
+      "Our Impact",
+      "CSR & Partnerships",
+      "Gallery",
+      "Contact Us",
+    ],
+
+    programsHeading: "Our Training Areas",
+    programs: [
+      "General Duty Assistant (GDA)",
+      "Healthcare & Paramedical",
+      "Computer & Digital Skills",
+      "Technical & Vocational Skills",
+    ],
+
+    contactHeading: "Get in Touch",
+
+    addressLines: [
+      "Chinchwad Station,",
+      "Pune – 411019,",
+      "Maharashtra, India.",
+    ],
+
+    socialComingSoon: "link coming soon",
+    socialUnavailable: "link unavailable",
+
+    copyright:
+      "All Rights Reserved.",
+
+    developedBy:
+      "Designed & Developed by",
+  },
+
+  mr: {
+    partnershipTitle:
+      "एकत्र येऊन नव्या संधी निर्माण करूया.",
+    partnershipDescription:
+      "कौशल्य विकासाच्या माध्यमातून युवक आणि महिलांच्या सक्षमीकरणासाठी आमच्यासोबत भागीदारी करा.",
+    partnershipButton: "आमच्यासोबत भागीदारी करा",
+
+    brandHomeLabel: "सक्षम फाउंडेशन मुख्यपृष्ठ",
+    brandName1: "SAKSHAM",
+    brandName2: "FOUNDATION",
+    logoAlt: "सक्षम फाउंडेशनचा लोगो",
+
+    aboutDescription:
+      "सक्षम फाउंडेशन कौशल्य विकास, व्यावसायिक शिक्षण, आरोग्यसेवा प्रशिक्षण आणि शाश्वत उपजीविकेच्या संधींच्या माध्यमातून युवक व महिलांचे सक्षमीकरण करण्यासाठी कार्यरत आहे.",
+
+    tagline:
+      "कौशल्य विकासातून जीवनात सकारात्मक परिवर्तन.",
+
+    quickLinksHeading: "महत्त्वाच्या लिंक्स",
+    quickLinks: [
+      "मुख्यपृष्ठ",
+      "आमच्याविषयी",
+      "आमचे प्रशिक्षण कार्यक्रम",
+      "आमचा प्रभाव",
+      "CSR आणि भागीदारी",
+      "फोटो गॅलरी",
+      "संपर्क साधा",
+    ],
+
+    programsHeading: "आमची प्रशिक्षण क्षेत्रे",
+    programs: [
+      "जनरल ड्युटी असिस्टंट (GDA)",
+      "आरोग्यसेवा व पॅरामेडिकल",
+      "संगणक व डिजिटल कौशल्ये",
+      "तांत्रिक व व्यावसायिक कौशल्ये",
+    ],
+
+    contactHeading: "आमच्याशी संपर्क साधा",
+
+    addressLines: [
+      "चिंचवड स्टेशन,",
+      "पुणे – ४११०१९,",
+      "महाराष्ट्र, भारत.",
+    ],
+
+    socialComingSoon: "लिंक लवकरच उपलब्ध होईल",
+    socialUnavailable: "लिंक उपलब्ध नाही",
+
+    copyright:
+      "सर्व हक्क राखीव.",
+
+    developedBy:
+      "डिझाइन आणि डेव्हलपमेंट",
+  },
+};
+
+// ROUTES REMAIN THE SAME IN BOTH LANGUAGES
+const quickLinkRoutes = [
+  "/",
+  "/about",
+  "/programs",
+  "/impact",
+  "/csr",
+  "/gallery",
+  "/contact",
 ];
 
-const programs = [
-  "General Duty Assistant (GDA)",
-  "Healthcare & Paramedical",
-  "Computer & Digital Skills",
-  "Technical & Vocational Skills",
+const programRoutes = [
+  "/programs#featured-gda",
+  "/programs",
+  "/programs",
+  "/programs",
 ];
 
-// Add official social media URLs when available.
+// ADD OFFICIAL SOCIAL MEDIA URLs WHEN AVAILABLE
 const socialLinks = [
-  { name: "Facebook", icon: FacebookIcon, href: "" },
-  { name: "Instagram", icon: InstagramIcon, href: "" },
-  { name: "LinkedIn", icon: LinkedinIcon, href: "" },
-  { name: "YouTube", icon: YoutubeIcon, href: "" },
+  {
+    name: "Facebook",
+    icon: FacebookIcon,
+    href: "",
+  },
+  {
+    name: "Instagram",
+    icon: InstagramIcon,
+    href: "",
+  },
+  {
+    name: "LinkedIn",
+    icon: LinkedinIcon,
+    href: "",
+  },
+  {
+    name: "YouTube",
+    icon: YoutubeIcon,
+    href: "",
+  },
 ];
+
+// FORMAT YEAR FOR ENGLISH / MARATHI
+const formatYear = (year, language) => {
+  if (language !== "mr") {
+    return String(year);
+  }
+
+  return String(year).replace(
+    /[0-9]/g,
+    (digit) => "०१२३४५६७८९"[Number(digit)]
+  );
+};
 
 export default function Footer() {
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en;
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -113,22 +267,23 @@ export default function Footer() {
 
             <div>
               <h3 className="text-base font-bold leading-snug text-white sm:text-lg">
-                Together, We Can Create Opportunities.
+                {t.partnershipTitle}
               </h3>
 
               <p className="mt-1 text-xs leading-6 text-blue-100/80 sm:text-sm">
-                Partner with us to empower youth and women through skills.
+                {t.partnershipDescription}
               </p>
             </div>
           </div>
 
-          <a
-            href="/contact#csr-enquiry"
+          <Link
+            to="/contact#csr-enquiry"
             className="group inline-flex w-fit shrink-0 items-center justify-center gap-2 rounded-lg bg-orange-500 px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:bg-orange-600"
           >
-            Partner With Us
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-          </a>
+            {t.partnershipButton}
+
+            <ArrowUpRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </Link>
         </div>
       </div>
 
@@ -140,43 +295,43 @@ export default function Footer() {
           {/* COLUMN 1 — FOUNDATION BRAND */}
           <div className="sm:col-span-2 lg:col-span-4">
 
-            <a
-              href="/"
+            <Link
+              to="/"
               className="inline-flex max-w-full items-center gap-3"
-              aria-label="Saksham Foundation Home"
+              aria-label={t.brandHomeLabel}
             >
-              {/* ACTUAL LOGO */}
+              {/* LOGO */}
               <img
                 src="/logo.jpeg"
-                alt="Saksham Foundation Logo"
+                alt={t.logoAlt}
                 loading="lazy"
                 className="h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16"
               />
 
               <div>
                 <span className="block text-xl font-extrabold leading-none tracking-tight text-white sm:text-2xl">
-                  SAKSHAM
+                  {t.brandName1}
                 </span>
 
                 <span className="mt-1 block text-xs font-bold uppercase tracking-[0.15em] text-green-400">
-                  FOUNDATION
+                  {t.brandName2}
                 </span>
               </div>
-            </a>
+            </Link>
 
+            {/* FOUNDATION DESCRIPTION */}
             <p className="mt-5 max-w-sm text-sm leading-7 text-blue-100/80">
-              Saksham Foundation is dedicated to empowering youth
-              and women through skill development, vocational
-              education, healthcare training and sustainable
-              livelihood opportunities.
+              {t.aboutDescription}
             </p>
 
+            {/* TAGLINE */}
             <p className="mt-4 text-sm font-semibold text-orange-300">
-              Empowering Lives Through Skill Development.
+              {t.tagline}
             </p>
 
             {/* SOCIAL MEDIA */}
             <div className="mt-6 flex flex-wrap items-center gap-2.5">
+
               {socialLinks.map((social) => {
                 const Icon = social.icon;
 
@@ -194,63 +349,71 @@ export default function Footer() {
                 ) : (
                   <span
                     key={social.name}
-                    title={`${social.name} link coming soon`}
-                    aria-label={`${social.name} link unavailable`}
+                    title={`${social.name} ${t.socialComingSoon}`}
+                    aria-label={`${social.name} ${t.socialUnavailable}`}
                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/60"
                   >
                     <Icon />
                   </span>
                 );
               })}
+
             </div>
           </div>
 
           {/* COLUMN 2 — QUICK LINKS */}
           <div className="lg:col-span-2">
+
             <h3 className="mb-5 text-base font-bold text-white">
-              Quick Links
+              {t.quickLinksHeading}
             </h3>
 
             <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
+
+              {t.quickLinks.map((name, index) => (
+                <li key={quickLinkRoutes[index]}>
+                  <Link
+                    to={quickLinkRoutes[index]}
                     className="group inline-flex items-center gap-2 text-sm text-blue-100/75 transition-colors hover:text-orange-300"
                   >
                     <ArrowRight className="h-3.5 w-3.5 shrink-0 text-orange-400 transition-transform group-hover:translate-x-1" />
-                    {link.name}
-                  </a>
+                    {name}
+                  </Link>
                 </li>
               ))}
+
             </ul>
           </div>
 
           {/* COLUMN 3 — PROGRAMS */}
           <div className="lg:col-span-3">
+
             <h3 className="mb-5 text-base font-bold text-white">
-              Our Training Areas
+              {t.programsHeading}
             </h3>
 
             <ul className="space-y-3">
-              {programs.map((program) => (
-                <li key={program}>
-                  <a
-                    href="/programs"
+
+              {t.programs.map((program, index) => (
+                <li key={index}>
+                  <Link
+                    to={programRoutes[index]}
                     className="group inline-flex items-start gap-2 text-sm leading-relaxed text-blue-100/75 transition-colors hover:text-orange-300"
                   >
                     <GraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-orange-400" />
                     {program}
-                  </a>
+                  </Link>
                 </li>
               ))}
+
             </ul>
           </div>
 
           {/* COLUMN 4 — CONTACT */}
           <div className="lg:col-span-3">
+
             <h3 className="mb-5 text-base font-bold text-white">
-              Get in Touch
+              {t.contactHeading}
             </h3>
 
             <div className="space-y-5">
@@ -260,11 +423,12 @@ export default function Footer() {
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-orange-400" />
 
                 <p className="text-sm leading-6 text-blue-100/80">
-                  Chinchwad Station,
-                  <br />
-                  Pune – 411019,
-                  <br />
-                  Maharashtra, India.
+                  {t.addressLines.map((line, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <br />}
+                      {line}
+                    </React.Fragment>
+                  ))}
                 </p>
               </div>
 
@@ -273,6 +437,7 @@ export default function Footer() {
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-orange-400" />
 
                 <div className="flex flex-col gap-1">
+
                   <a
                     href="tel:+918830223458"
                     className="text-sm text-blue-100/80 transition-colors hover:text-orange-300"
@@ -300,24 +465,31 @@ export default function Footer() {
                   sakshamfoundationsmartskills@gmail.com
                 </a>
               </div>
+
             </div>
           </div>
+
         </div>
       </div>
 
       {/* BOTTOM COPYRIGHT BAR */}
       <div className="relative border-t border-white/10 bg-[#04143C]">
+
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-6 text-center sm:px-8 lg:flex-row lg:gap-6 lg:px-10 lg:py-5 lg:text-left">
 
+          {/* COPYRIGHT */}
           <p className="text-xs leading-6 text-blue-100/70">
-            © {currentYear} Saksham Foundation. All Rights Reserved.
+            © {formatYear(currentYear, language)}{" "}
+            {language === "mr"
+              ? "सक्षम फाउंडेशन."
+              : "Saksham Foundation."}{" "}
+            {t.copyright}
           </p>
-
-          
 
           {/* HASHGRID CREDIT */}
           <p className="text-xs leading-6 text-blue-100/70">
-            Designed &amp; Developed by{" "}
+            {t.developedBy}{" "}
+
             <a
               href="https://hashgridtechnologies.com/"
               target="_blank"
@@ -327,8 +499,10 @@ export default function Footer() {
               HashGrid Technologies Pvt. Ltd.
             </a>
           </p>
+
         </div>
       </div>
+
     </footer>
   );
 }
