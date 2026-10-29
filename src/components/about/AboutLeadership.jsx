@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, UsersRound, Sparkles } from "lucide-react";
+import { UsersRound } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 
 const translations = {
@@ -13,9 +13,19 @@ const translations = {
     members: [
       {
         name: "Uttam Gopane",
+        designation: "Director",
       },
       {
         name: "Sunil Ghorpade",
+        designation: "Director",
+      },
+      {
+        name: "Rahul Kamble",
+        designation: "Director",
+      },
+      {
+        name: "Hanumant Dikale",
+        designation: "Director",
       },
     ],
   },
@@ -29,9 +39,19 @@ const translations = {
     members: [
       {
         name: "उत्तम गोपणे",
+        designation: "संचालक",
       },
       {
         name: "सुनील घोरपडे",
+        designation: "संचालक",
+      },
+      {
+        name: "राहुल कांबळे",
+        designation: "संचालक",
+      },
+      {
+        name: "हनुमंत डिकले",
+        designation: "संचालक",
       },
     ],
   },
@@ -40,6 +60,8 @@ const translations = {
 const memberImages = [
   "/uttam.jpeg",
   "/sunil.jpeg",
+  "/rahul.jpeg",
+  "/hanumant.jpeg",
 ];
 
 // ==========================================
@@ -98,11 +120,13 @@ function Reveal({ children, delay = 0 }) {
 
 function MemberCard({ member, image, index }) {
   const [imageFailed, setImageFailed] = useState(false);
-  const green = index === 0;
+  const green = index % 2 === 0;
 
   return (
-    <article className="al-card group relative overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_15px_45px_rgba(6,27,80,0.08)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_60px_rgba(6,27,80,0.15)]">
-      <div className="relative h-[320px] overflow-hidden bg-[#102B60] sm:h-[390px] lg:h-[420px]">
+    <article className="al-card group relative h-full overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_15px_45px_rgba(6,27,80,0.08)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_60px_rgba(6,27,80,0.15)]">
+
+      {/* MEMBER IMAGE */}
+      <div className="relative h-[320px] overflow-hidden bg-[#102B60] sm:h-[350px] lg:h-[380px]">
         {!imageFailed ? (
           <img
             src={image}
@@ -128,7 +152,9 @@ function MemberCard({ member, image, index }) {
         />
       </div>
 
+      {/* MEMBER INFORMATION */}
       <div className="relative p-6 text-center sm:p-7">
+
         <div
           className={`mx-auto mb-4 h-1 w-12 rounded-full ${
             green ? "bg-green-600" : "bg-orange-500"
@@ -138,6 +164,15 @@ function MemberCard({ member, image, index }) {
         <h3 className="text-xl font-extrabold text-[#061B50] sm:text-2xl">
           {member.name}
         </h3>
+
+        {/* DESIGNATION */}
+        <p
+          className={`mt-2 text-sm font-bold uppercase tracking-[0.12em] ${
+            green ? "text-green-700" : "text-orange-600"
+          }`}
+        >
+          {member.designation}
+        </p>
       </div>
     </article>
   );
@@ -165,7 +200,8 @@ export default function AboutLeadership() {
         <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-orange-100/60 blur-3xl" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+
         {/* HEADER */}
         <Reveal>
           <div className="mx-auto mb-12 max-w-3xl text-center">
@@ -181,7 +217,9 @@ export default function AboutLeadership() {
 
             <h2 className="text-3xl font-extrabold leading-tight text-[#061B50] sm:text-4xl lg:text-5xl">
               {t.heading1}{" "}
-              <span className="text-orange-600">{t.heading2}</span>
+              <span className="text-orange-600">
+                {t.heading2}
+              </span>
             </h2>
 
             <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
@@ -190,10 +228,10 @@ export default function AboutLeadership() {
           </div>
         </Reveal>
 
-        {/* TWO LEADERSHIP CARDS */}
-        <div className="mx-auto grid max-w-[920px] grid-cols-1 gap-7 sm:grid-cols-2 lg:gap-10">
+        {/* FOUR LEADERSHIP CARDS */}
+        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {t.members.map((member, index) => (
-            <Reveal key={index} delay={index * 130}>
+            <Reveal key={member.name} delay={index * 130}>
               <MemberCard
                 member={member}
                 image={memberImages[index]}
@@ -214,6 +252,7 @@ export default function AboutLeadership() {
             rgba(255,255,255,0.04) 62%,
             transparent 80%
           );
+
           transform: translateX(-160%);
           transition: transform 900ms ease;
         }
