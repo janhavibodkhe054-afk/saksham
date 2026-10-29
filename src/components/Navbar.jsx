@@ -247,13 +247,6 @@ export default function Navbar() {
 
             <span className="hidden h-3 w-px bg-white/30 sm:block" />
 
-            {/* SECONDARY PHONE */}
-            <a
-              href="tel:+918830186623"
-              className="hidden items-center whitespace-nowrap text-[13px] font-semibold text-white transition-colors hover:text-orange-300 sm:inline-flex sm:text-[13px]"
-            >
-              +91 88301 86623
-            </a>
 
           </div>
         </div>
@@ -511,14 +504,7 @@ export default function Navbar() {
                   +91 88302 23458
                 </a>
 
-                <a
-                  href="tel:+918830186623"
-                  className="saksham-mobile-contact group flex items-center gap-3 rounded-lg bg-[#F3F7FC] px-4 py-3 text-sm font-semibold text-[#061B50] transition-all duration-300 hover:bg-orange-50"
-                >
-                  <Phone className="h-4 w-4 shrink-0 text-orange-600 transition-transform group-hover:rotate-12" />
-
-                  +91 88301 86623
-                </a>
+               
 
               </div>
 

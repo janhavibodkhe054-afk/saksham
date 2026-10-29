@@ -155,7 +155,7 @@ export default function LeadershipSection() {
               {/* PHOTO */}
               <div className="relative overflow-hidden rounded-[24px] bg-slate-200 shadow-[0_20px_50px_rgba(6,27,80,0.1)]">
                 <img
-                  src="/images/mahesh-sonkamble.jpg"
+                  src="/mahesh.jpeg"
                   alt={t.photoAlt}
                   loading="lazy"
                   decoding="async"

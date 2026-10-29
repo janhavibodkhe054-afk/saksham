@@ -1059,10 +1059,7 @@ export default function DonatePage() {
                 <DonationQR t={t} />
               </Reveal>
 
-              {/* HOW TO DONATE */}
-              <Reveal direction="up" delay={160}>
-                <DonationSteps t={t} />
-              </Reveal>
+              
 
               {/* HELP */}
               <Reveal direction="up" delay={200}>

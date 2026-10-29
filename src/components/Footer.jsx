@@ -463,12 +463,7 @@ export default function Footer() {
                     +91 88302 23458
                   </a>
 
-                  <a
-                    href="tel:+918830186623"
-                    className="text-sm text-blue-100/80 transition-colors hover:text-orange-300"
-                  >
-                    +91 88301 86623
-                  </a>
+                  
                 </div>
               </div>
 

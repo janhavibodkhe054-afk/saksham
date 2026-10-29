@@ -5,6 +5,9 @@ import VisionMissionSection from '../components/about/VisionMissionSection'
 import CoreValuesSection from '../components/about/CoreValuesSection'
 import OurJourneyExperienceSection from '../components/about/OurJourneyExperienceSection'
 import LeadershipSection from '../components/about/LeadershipSection'
+import AboutLeadership from '../components/about/AboutLeadership'
+import AboutDocuments from '../components/about/AboutDocuments'
+import VerifiedCertifiedCard from '../components/about/VerifiedCertifiedCard'
 
 const About = () => {
   return (
@@ -15,6 +18,9 @@ const About = () => {
       <CoreValuesSection/>
       <OurJourneyExperienceSection/>
       <LeadershipSection/>
+      <AboutLeadership/>
+      {/* <VerifiedCertifiedCard/> */}
+      <AboutDocuments/>
     </div>
   )
 }
