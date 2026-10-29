@@ -1,9 +1,5 @@
 
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   HeartHandshake,
@@ -16,7 +12,6 @@ import {
   Check,
   QrCode,
   ShieldCheck,
-  MapPin,
   Info,
   Building2,
   UserRound,
@@ -27,23 +22,32 @@ import {
   GraduationCap,
   Users,
   HeartPulse,
-  CheckCircle2,
-  ClipboardCheck,
   ReceiptText,
   MessageCircle,
+  IndianRupee,
 } from "lucide-react";
 
 import { useLanguage } from "../../context/LanguageContext";
 
-// ============================================
+// ==========================================
+// FOUNDATION PAYMENT DETAILS
+// ==========================================
+
+const FOUNDATION_UPI_ID = "117998188023659@cnrb";
+const FOUNDATION_UPI_NAME = "Saksham Foundation";
+
+const FOUNDATION_PHONE = "+918830223458";
+const FOUNDATION_EMAIL =
+  "sakshamfoundationsmartskills@gmail.com";
+
+// ==========================================
 // BANK DETAILS
-// ============================================
+// ==========================================
 
 const bankDetails = {
   bankName: "CANARA BANK",
 
-  accountBranch:
-    "263-PUNE KOREGAON PARK 411001",
+  accountBranch: "263-PUNE KOREGAON PARK 411001",
 
   ifsc: "CNRB0000263",
 
@@ -73,23 +77,16 @@ const bankDetails = {
 
   accountTitle: "SAKSHAM FOUNDATION",
 
-  authorizedPerson:
-    "MAHESH ROHIDAS SONKAMBLE",
+  authorizedPerson: "MAHESH ROHIDAS SONKAMBLE",
 };
 
-const FOUNDATION_PHONE = "+918830223458";
-const FOUNDATION_EMAIL =
-  "sakshamfoundationsmartskills@gmail.com";
-
-// ============================================
+// ==========================================
 // TRANSLATIONS
-// ============================================
+// ==========================================
 
 const translations = {
   en: {
-    // HERO
     heroBadge: "SUPPORT SAKSHAM FOUNDATION",
-
     heroHeading1: "Make a",
     heroHeading2: "Meaningful Contribution.",
 
@@ -102,18 +99,15 @@ const translations = {
     floatingText2: "Healthcare Skills",
     floatingText3: "Brighter Futures",
 
-    // MAIN SECTION
     donationLabel: "BANK & DONATION DETAILS",
-
     donationHeading1: "Support Our",
     donationHeading2: "Mission.",
 
     donationDescription:
-      "Make a contribution through a direct bank transfer or by scanning Saksham Foundation's official donation QR code.",
+      "Make a contribution using UPI, QR code or direct bank transfer to Saksham Foundation.",
 
     bankHeading: "Official Bank Account Details",
-    bankSubtitle:
-      "Canara Bank • Saksham Foundation",
+    bankSubtitle: "Canara Bank • Saksham Foundation",
 
     primaryDetails: "Bank Account Information",
     branchDetails: "Bank Branch Information",
@@ -140,47 +134,32 @@ const translations = {
     copy: "Copy",
     copied: "Copied",
 
-    // QR
+    quickLabel: "QUICK DONATION",
+    quickHeading: "Donate via UPI",
+    quickDescription:
+      "Select an amount and continue securely through your preferred UPI application.",
+
+    selectAmount: "Select Donation Amount",
+    customAmount: "Enter Custom Amount",
+    amountPlaceholder: "Enter amount in ₹",
+    totalAmount: "Donation Amount",
+    payButton: "Pay via UPI / PhonePe",
+    upiIdLabel: "Saksham Foundation UPI ID",
+
+    paymentNotice:
+      "Verify the recipient name and amount in your UPI app before authorizing payment.",
+
     qrLabel: "SCAN & DONATE",
     qrHeading: "Donate Using QR Code",
 
     qrDescription:
-      "Scan the official QR code using a supported payment application.",
+      "Scan the donation QR code using PhonePe, Google Pay or another supported UPI application.",
 
-    qrMissing: "Official QR Code Not Added",
-
-    qrMissingInfo:
-      "Upload the verified QR image to public/donation-qr.jpeg",
+    qrMissing: "Donation QR Code Not Available",
+    qrMissingInfo: "Please add qr.png to your public folder.",
 
     qrNotice:
       "Verify the receiver's name and payment details before completing your transaction.",
-
-    // BELOW QR
-    stepsBadge: "QUICK GUIDE",
-    stepsHeading: "How to Make a Donation",
-
-    paymentSteps: [
-      {
-        title: "Scan the QR",
-        description:
-          "Open your payment app and scan the official donation QR.",
-      },
-      {
-        title: "Verify Payment Details",
-        description:
-          "Confirm that the beneficiary details are correct.",
-      },
-      {
-        title: "Complete the Payment",
-        description:
-          "Enter your contribution amount and authorize the transaction.",
-      },
-      {
-        title: "Save Your Receipt",
-        description:
-          "Keep your transaction confirmation for future reference.",
-      },
-    ],
 
     helpHeading: "Need Help With Your Donation?",
 
@@ -190,11 +169,10 @@ const translations = {
     contactButton: "Call Our Team",
     emailButton: "Send Email",
 
-    // CLOSING
     importantTitle: "Important Payment Information",
 
     importantDescription:
-      "Please verify the bank account or QR payment information with Saksham Foundation before donating. Save your transaction receipt for your records.",
+      "Please verify the bank account or UPI payment information with Saksham Foundation before donating. Save your transaction receipt for your records.",
 
     thankYou:
       "Your support helps create opportunities for a brighter future.",
@@ -204,9 +182,7 @@ const translations = {
   },
 
   mr: {
-    // HERO
     heroBadge: "सक्षम फाउंडेशनला सहकार्य करा",
-
     heroHeading1: "तुमच्या योगदानातून",
     heroHeading2: "घडेल उज्ज्वल भविष्य.",
 
@@ -219,18 +195,15 @@ const translations = {
     floatingText2: "आरोग्यसेवा कौशल्ये",
     floatingText3: "उज्ज्वल भविष्य",
 
-    // MAIN SECTION
     donationLabel: "बँक व देणगी माहिती",
-
     donationHeading1: "आमच्या कार्याला",
     donationHeading2: "हातभार लावा.",
 
     donationDescription:
-      "सक्षम फाउंडेशनला थेट बँक ट्रान्सफरद्वारे किंवा संस्थेचा अधिकृत QR कोड स्कॅन करून योगदान द्या.",
+      "सक्षम फाउंडेशनला UPI, QR कोड किंवा थेट बँक ट्रान्सफरद्वारे योगदान द्या.",
 
     bankHeading: "अधिकृत बँक खात्याची माहिती",
-    bankSubtitle:
-      "कॅनरा बँक • सक्षम फाउंडेशन",
+    bankSubtitle: "कॅनरा बँक • सक्षम फाउंडेशन",
 
     primaryDetails: "बँक खात्याची माहिती",
     branchDetails: "बँक शाखेची माहिती",
@@ -257,47 +230,33 @@ const translations = {
     copy: "कॉपी करा",
     copied: "कॉपी झाले",
 
-    // QR
+    quickLabel: "त्वरित योगदान",
+    quickHeading: "UPI द्वारे देणगी द्या",
+
+    quickDescription:
+      "देणगीची रक्कम निवडा आणि तुमच्या UPI App द्वारे पेमेंट करा.",
+
+    selectAmount: "देणगीची रक्कम निवडा",
+    customAmount: "इतर रक्कम टाका",
+    amountPlaceholder: "रक्कम रुपयांमध्ये टाका",
+    totalAmount: "देणगीची रक्कम",
+    payButton: "UPI / PhonePe द्वारे पेमेंट करा",
+    upiIdLabel: "सक्षम फाउंडेशन UPI ID",
+
+    paymentNotice:
+      "पेमेंट करण्यापूर्वी UPI App मध्ये प्राप्तकर्त्याचे नाव आणि रक्कम तपासा.",
+
     qrLabel: "स्कॅन करा व योगदान द्या",
     qrHeading: "QR कोडद्वारे योगदान",
 
     qrDescription:
-      "संस्थेचा अधिकृत QR कोड समर्थित पेमेंट अॅपद्वारे स्कॅन करा.",
+      "PhonePe, Google Pay किंवा इतर UPI App वापरून Donation QR Code स्कॅन करा.",
 
-    qrMissing: "अधिकृत QR कोड जोडलेला नाही",
-
-    qrMissingInfo:
-      "पडताळणी केलेली QR Image public/donation-qr.jpeg येथे ठेवा",
+    qrMissing: "Donation QR Code उपलब्ध नाही",
+    qrMissingInfo: "public फोल्डरमध्ये qr.png Image ठेवा.",
 
     qrNotice:
       "व्यवहार पूर्ण करण्यापूर्वी प्राप्तकर्त्याचे नाव आणि पेमेंट तपशील तपासा.",
-
-    // BELOW QR
-    stepsBadge: "योगदानाची प्रक्रिया",
-    stepsHeading: "योगदान कसे करावे?",
-
-    paymentSteps: [
-      {
-        title: "QR स्कॅन करा",
-        description:
-          "Payment App उघडून अधिकृत Donation QR स्कॅन करा.",
-      },
-      {
-        title: "माहिती तपासा",
-        description:
-          "प्राप्तकर्त्याचे नाव आणि पेमेंट तपशील योग्य असल्याची खात्री करा.",
-      },
-      {
-        title: "पेमेंट पूर्ण करा",
-        description:
-          "योगदानाची रक्कम टाका आणि व्यवहार अधिकृत करा.",
-      },
-      {
-        title: "पावती जतन करा",
-        description:
-          "भविष्यातील संदर्भासाठी व्यवहाराची पावती सुरक्षित ठेवा.",
-      },
-    ],
 
     helpHeading: "योगदानासाठी मदत हवी आहे?",
 
@@ -307,11 +266,10 @@ const translations = {
     contactButton: "आमच्याशी संपर्क करा",
     emailButton: "ईमेल पाठवा",
 
-    // CLOSING
     importantTitle: "महत्त्वाची पेमेंट माहिती",
 
     importantDescription:
-      "योगदान करण्यापूर्वी बँक खाते किंवा QR Payment ची माहिती सक्षम फाउंडेशनकडून तपासून घ्या. व्यवहाराची पावती सुरक्षित ठेवा.",
+      "योगदान करण्यापूर्वी बँक खाते किंवा UPI Payment ची माहिती सक्षम फाउंडेशनकडून तपासून घ्या. व्यवहाराची पावती सुरक्षित ठेवा.",
 
     thankYou:
       "तुमच्या सहकार्यातून उज्ज्वल भविष्यासाठी नवीन संधी निर्माण होऊ शकतात.",
@@ -321,9 +279,9 @@ const translations = {
   },
 };
 
-// ============================================
+// ==========================================
 // SCROLL REVEAL
-// ============================================
+// ==========================================
 
 function Reveal({
   children,
@@ -338,13 +296,11 @@ function Reveal({
     const element = ref.current;
     if (!element) return;
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
     if (
-      reducedMotion ||
-      !("IntersectionObserver" in window)
+      !("IntersectionObserver" in window) ||
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches
     ) {
       setVisible(true);
       return;
@@ -396,42 +352,37 @@ function Reveal({
   );
 }
 
-// ============================================
+// ==========================================
 // COPY BUTTON
-// ============================================
+// ==========================================
 
 function CopyButton({ value, t }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    let success = false;
-
     try {
       await navigator.clipboard.writeText(value);
-      success = true;
-    } catch {
-      try {
-        const textarea = document.createElement(
-          "textarea"
-        );
-
-        textarea.value = value;
-        textarea.style.position = "fixed";
-        textarea.style.opacity = "0";
-
-        document.body.appendChild(textarea);
-        textarea.select();
-
-        success = document.execCommand("copy");
-
-        document.body.removeChild(textarea);
-      } catch {
-        success = false;
-      }
-    }
-
-    if (success) {
       setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = value;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      const success = document.execCommand("copy");
+      document.body.removeChild(textarea);
+
+      if (success) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
     }
   };
 
@@ -440,12 +391,12 @@ function CopyButton({ value, t }) {
       type="button"
       onClick={handleCopy}
       aria-label={`${t.copy}: ${value}`}
-      className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-[#061B50] transition-all duration-300 hover:border-orange-300 hover:bg-orange-50"
+      className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-[#061B50] transition hover:border-green-400 hover:bg-green-50"
     >
       {copied ? (
-        <Check className="h-3.5 w-3.5 text-green-600" />
+        <Check className="h-4 w-4 text-green-600" />
       ) : (
-        <Copy className="h-3.5 w-3.5" />
+        <Copy className="h-4 w-4" />
       )}
 
       {copied ? t.copied : t.copy}
@@ -453,9 +404,9 @@ function CopyButton({ value, t }) {
   );
 }
 
-// ============================================
+// ==========================================
 // BANK DETAIL ROW
-// ============================================
+// ==========================================
 
 function DetailRow({
   label,
@@ -481,24 +432,17 @@ function DetailRow({
           {value}
         </span>
 
-        {copy && (
-          <CopyButton value={value} t={t} />
-        )}
+        {copy && <CopyButton value={value} t={t} />}
       </div>
     </div>
   );
 }
 
-// ============================================
+// ==========================================
 // BANK DETAIL GROUP
-// ============================================
+// ==========================================
 
-function DetailGroup({
-  title,
-  icon: Icon,
-  rows,
-  t,
-}) {
+function DetailGroup({ title, icon: Icon, rows, t }) {
   return (
     <div className="border-b border-slate-200 last:border-b-0">
       <div className="flex items-center gap-3 bg-[#F6F8FC] px-5 py-4 sm:px-7">
@@ -524,25 +468,22 @@ function DetailGroup({
   );
 }
 
-// ============================================
-// ANIMATED HERO VISUAL
-// ============================================
+// ==========================================
+// HERO VISUAL
+// ==========================================
 
 function DonateHeroVisual({ t }) {
   return (
     <div
       aria-hidden="true"
-      className="donate-hero-visual relative mx-auto h-[290px] w-full max-w-[460px]"
+      className="relative mx-auto h-[290px] w-full max-w-[460px]"
     >
-      {/* GLOW */}
       <div className="donate-hero-glow absolute left-1/2 top-1/2 h-[250px] w-[250px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/20 blur-[60px]" />
 
-      {/* ORBIT TRACKS */}
-      <div className="donate-orbit-ring donate-orbit-ring-1 absolute left-1/2 top-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15" />
+      <div className="donate-orbit-ring absolute left-1/2 top-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15" />
 
-      <div className="donate-orbit-ring donate-orbit-ring-2 absolute left-1/2 top-1/2 h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-400/15" />
+      <div className="donate-orbit-ring absolute left-1/2 top-1/2 h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-400/15" />
 
-      {/* ROTATING ORBIT */}
       <div className="donate-rotating-orbit absolute left-1/2 top-1/2 h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2">
         <div className="absolute left-1/2 top-0 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-white/20 bg-[#143976] text-orange-300 shadow-xl">
           <GraduationCap className="h-5 w-5" />
@@ -553,7 +494,6 @@ function DonateHeroVisual({ t }) {
         </div>
       </div>
 
-      {/* CENTER CARD */}
       <div className="donate-main-heart absolute left-1/2 top-1/2 z-10 flex h-[135px] w-[135px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[35px] border border-white/20 bg-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl">
         <HeartHandshake
           className="h-[70px] w-[70px] text-orange-400"
@@ -561,48 +501,226 @@ function DonateHeroVisual({ t }) {
         />
       </div>
 
-      {/* FLOATING BADGES */}
-      <div className="donate-hero-float donate-float-one absolute left-0 top-6 z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
+      <div className="donate-hero-float absolute left-0 top-6 z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
         <Users className="h-5 w-5 text-blue-300" />
         <span className="text-xs font-bold text-white">
           {t.floatingText1}
         </span>
       </div>
 
-      <div className="donate-hero-float donate-float-two absolute -right-2 top-14 z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
+      <div className="donate-hero-float absolute -right-2 top-14 z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
         <HeartPulse className="h-5 w-5 text-green-300" />
         <span className="text-xs font-bold text-white">
           {t.floatingText2}
         </span>
       </div>
 
-      <div className="donate-hero-float donate-float-three absolute bottom-1 left-[15%] z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
+      <div className="donate-hero-float absolute bottom-1 left-[15%] z-20 flex items-center gap-2 rounded-xl border border-white/15 bg-[#10346E]/95 px-4 py-3 shadow-2xl">
         <Heart className="h-5 w-5 text-orange-300" />
         <span className="text-xs font-bold text-white">
           {t.floatingText3}
         </span>
       </div>
-
-      {/* SMALL DECORATIVE PARTICLES */}
-      <span className="donate-particle absolute right-[15%] top-[8%] h-2.5 w-2.5 rounded-full bg-orange-400" />
-
-      <span className="donate-particle donate-particle-delay absolute bottom-[17%] right-[4%] h-2 w-2 rounded-full bg-blue-300" />
-
-      <span className="donate-particle absolute left-[13%] top-[48%] h-1.5 w-1.5 rounded-full bg-green-300" />
     </div>
   );
 }
 
-// ============================================
-// DONATION QR
-// ============================================
+// ==========================================
+// QUICK UPI DONATION
+// ==========================================
+
+function QuickUPIDonation({ t }) {
+  const [amount, setAmount] = useState("1000");
+  const [customAmount, setCustomAmount] = useState("");
+
+  const amounts = ["500", "1000", "2000", "5000"];
+
+  const selectedAmount =
+    amount === "custom" ? customAmount : amount;
+
+  const numericAmount = Number(selectedAmount);
+
+  const validAmount =
+    selectedAmount !== "" &&
+    Number.isFinite(numericAmount) &&
+    numericAmount >= 1 &&
+    numericAmount <= 100000;
+
+  const handlePayment = () => {
+    if (!validAmount) return;
+
+    const params = new URLSearchParams({
+      pa: FOUNDATION_UPI_ID,
+      pn: FOUNDATION_UPI_NAME,
+      am: numericAmount.toFixed(2),
+      cu: "INR",
+      tn: "Donation to Saksham Foundation",
+    });
+
+    const paymentUrl = `upi://pay?${params.toString()}`;
+
+    window.location.href = paymentUrl;
+  };
+
+  return (
+    <div className="overflow-hidden rounded-[24px] border border-green-200 bg-white shadow-[0_12px_40px_rgba(6,27,80,0.06)]">
+
+      {/* HEADER */}
+      <div className="bg-[#EAFBF0] px-5 py-5 sm:px-7">
+        <div className="flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-600 text-white">
+            <IndianRupee className="h-6 w-6" />
+          </div>
+
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-green-700">
+              {t.quickLabel}
+            </p>
+
+            <h3 className="text-lg font-extrabold text-[#061B50]">
+              {t.quickHeading}
+            </h3>
+          </div>
+        </div>
+
+        <p className="mt-3 text-xs leading-6 text-slate-600">
+          {t.quickDescription}
+        </p>
+      </div>
+
+      <div className="p-5 sm:p-7">
+
+        {/* AMOUNT SELECTION */}
+        <p className="mb-4 text-sm font-bold text-[#061B50]">
+          {t.selectAmount}
+        </p>
+
+        <div className="grid grid-cols-2 gap-3">
+          {amounts.map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setAmount(value)}
+              aria-pressed={amount === value}
+              className={`rounded-xl border-2 px-3 py-3.5 text-base font-extrabold transition-all ${
+                amount === value
+                  ? "border-green-600 bg-green-50 text-green-700"
+                  : "border-slate-200 bg-white text-[#061B50] hover:border-green-300"
+              }`}
+            >
+              ₹{Number(value).toLocaleString("en-IN")}
+            </button>
+          ))}
+        </div>
+
+        {/* CUSTOM AMOUNT */}
+        <button
+          type="button"
+          onClick={() => setAmount("custom")}
+          aria-pressed={amount === "custom"}
+          className={`mt-3 w-full rounded-xl border-2 px-4 py-3 text-sm font-bold transition-all ${
+            amount === "custom"
+              ? "border-green-600 bg-green-50 text-green-700"
+              : "border-slate-200 text-slate-600 hover:border-green-300"
+          }`}
+        >
+          {t.customAmount}
+        </button>
+
+        {amount === "custom" && (
+          <div className="mt-3">
+            <label
+              htmlFor="custom-donation-amount"
+              className="mb-2 block text-xs font-semibold text-slate-600"
+            >
+              {t.customAmount}
+            </label>
+
+            <input
+              id="custom-donation-amount"
+              type="number"
+              min="1"
+              max="100000"
+              step="1"
+              inputMode="decimal"
+              value={customAmount}
+              onChange={(event) =>
+                setCustomAmount(event.target.value)
+              }
+              placeholder={t.amountPlaceholder}
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base font-semibold text-[#061B50] outline-none transition focus:border-green-600"
+            />
+          </div>
+        )}
+
+        {/* TOTAL AMOUNT */}
+        <div className="mt-5 flex items-center justify-between gap-3 rounded-xl bg-[#F5F8FC] px-4 py-4">
+          <span className="text-sm font-semibold text-slate-600">
+            {t.totalAmount}
+          </span>
+
+          <span className="text-xl font-extrabold text-[#061B50]">
+            {validAmount
+              ? `₹${numericAmount.toLocaleString("en-IN")}`
+              : "—"}
+          </span>
+        </div>
+
+        {/* UPI ID */}
+        <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
+          <p className="mb-3 text-xs font-bold text-slate-500">
+            {t.upiIdLabel}
+          </p>
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="break-all text-sm font-extrabold text-[#061B50]">
+              {FOUNDATION_UPI_ID}
+            </span>
+
+            <CopyButton
+              value={FOUNDATION_UPI_ID}
+              t={t}
+            />
+          </div>
+        </div>
+
+        {/* PAY BUTTON */}
+        <button
+          type="button"
+          onClick={handlePayment}
+          disabled={!validAmount}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#20B968] px-4 py-4 text-center text-sm font-extrabold text-white shadow-[0_10px_25px_rgba(32,185,104,0.2)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#159B53] hover:shadow-[0_15px_30px_rgba(32,185,104,0.3)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 sm:text-base"
+        >
+          <IndianRupee className="h-5 w-5 shrink-0" />
+
+          {t.payButton}
+
+          <ArrowUpRight className="h-4 w-4 shrink-0" />
+        </button>
+
+        {/* SECURITY NOTICE */}
+        <div className="mt-5 flex items-start gap-2 border-t border-slate-100 pt-4">
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
+
+          <p className="text-xs leading-6 text-slate-500">
+            {t.paymentNotice}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// DONATION QR CODE
+// ==========================================
 
 function DonationQR({ t }) {
   const [qrStatus, setQrStatus] = useState("loading");
 
   return (
     <div className="donate-qr-card relative overflow-hidden rounded-[24px] bg-[#061B50] p-5 text-white shadow-[0_15px_45px_rgba(6,27,80,0.12)] sm:p-7">
-      {/* DECORATIVE CIRCLE */}
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 -top-24 h-60 w-60 rounded-full border-[35px] border-white/5"
@@ -622,13 +740,14 @@ function DonationQR({ t }) {
           {t.qrDescription}
         </p>
 
-        {/* QR IMAGE - FULL SIZE */}
+        {/* QR IMAGE */}
         <div className="mx-auto mt-6 max-w-[360px]">
           <div className="donate-qr-image overflow-hidden rounded-2xl bg-white p-3 shadow-xl sm:p-4">
+
             {qrStatus !== "error" && (
               <img
                 src="/qr.png"
-                alt="Saksham Foundation official donation QR code"
+                alt="Saksham Foundation donation QR code"
                 loading="lazy"
                 decoding="async"
                 onLoad={() => setQrStatus("loaded")}
@@ -653,7 +772,6 @@ function DonationQR({ t }) {
           </div>
         </div>
 
-        {/* VERIFICATION NOTE */}
         <div className="mt-6 flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.06] p-4">
           <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-green-400" />
 
@@ -666,81 +784,15 @@ function DonationQR({ t }) {
   );
 }
 
-// ============================================
-// DONATION STEPS
-// ============================================
-
-function DonationSteps({ t }) {
-  const icons = [
-    QrCode,
-    ShieldCheck,
-    Wallet,
-    ReceiptText,
-  ];
-
-  return (
-    <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white p-5 shadow-[0_12px_40px_rgba(6,27,80,0.05)] sm:p-7">
-      <div className="mb-6">
-        <span className="text-[11px] font-bold uppercase tracking-[0.13em] text-orange-600">
-          {t.stepsBadge}
-        </span>
-
-        <h3 className="mt-2 text-xl font-extrabold text-[#061B50]">
-          {t.stepsHeading}
-        </h3>
-      </div>
-
-      <div className="space-y-5">
-        {t.paymentSteps.map((step, index) => {
-          const Icon = icons[index];
-
-          return (
-            <div
-              key={index}
-              className="donate-step-item group flex items-start gap-4"
-            >
-              {/* ICON */}
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600 transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-orange-100">
-                <Icon className="h-5 w-5" />
-              </div>
-
-              {/* TEXT */}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold text-orange-600">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <h4 className="text-sm font-bold text-[#061B50]">
-                    {step.title}
-                  </h4>
-                </div>
-
-                <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
-                  {step.description}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ============================================
-// HELP CARD
-// ============================================
+// ==========================================
+// DONATION HELP CARD
+// ==========================================
 
 function DonationHelp({ t }) {
   return (
     <div className="relative overflow-hidden rounded-[24px] bg-[#EAF1FB] p-5 sm:p-7">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-blue-200/60 blur-3xl"
-      />
-
       <div className="relative z-10">
+
         <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#061B50] shadow-sm">
           <MessageCircle className="h-5 w-5" />
         </div>
@@ -759,10 +811,8 @@ function DonationHelp({ t }) {
             className="group inline-flex items-center gap-2 rounded-lg bg-[#061B50] px-4 py-3 text-xs font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#123678]"
           >
             <Phone className="h-4 w-4" />
-
             {t.contactButton}
-
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="h-4 w-4" />
           </a>
 
           <a
@@ -778,9 +828,9 @@ function DonationHelp({ t }) {
   );
 }
 
-// ============================================
-// MAIN PAGE
-// ============================================
+// ==========================================
+// MAIN DONATE PAGE
+// ==========================================
 
 export default function DonatePage() {
   const { language } = useLanguage();
@@ -897,6 +947,7 @@ export default function DonatePage() {
 
   return (
     <main className="overflow-x-hidden">
+
       {/* ===================================== */}
       {/* HERO */}
       {/* ===================================== */}
@@ -926,8 +977,10 @@ export default function DonatePage() {
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
-            {/* LEFT */}
+
+            {/* LEFT CONTENT */}
             <div className="lg:col-span-7">
+
               <Reveal direction="left">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-400/25 bg-orange-400/10 px-3 py-1.5">
                   <HeartHandshake className="h-4 w-4 text-orange-400" />
@@ -938,7 +991,7 @@ export default function DonatePage() {
                 </div>
               </Reveal>
 
-              <Reveal direction="up" delay={100}>
+              <Reveal delay={100}>
                 <h1 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-[45px]">
                   {t.heroHeading1}{" "}
 
@@ -948,13 +1001,13 @@ export default function DonatePage() {
                 </h1>
               </Reveal>
 
-              <Reveal direction="up" delay={180}>
+              <Reveal delay={180}>
                 <p className="mt-4 max-w-xl text-sm leading-7 text-slate-200 sm:text-base">
                   {t.heroDescription}
                 </p>
               </Reveal>
 
-              <Reveal direction="up" delay={240}>
+              <Reveal delay={240}>
                 <a
                   href="#donation-details"
                   className="donate-hero-button group relative mt-6 inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-orange-500 px-5 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-orange-600 hover:shadow-lg"
@@ -970,7 +1023,7 @@ export default function DonatePage() {
               </Reveal>
             </div>
 
-            {/* RIGHT - MOVING ANIMATION */}
+            {/* RIGHT HERO ANIMATION */}
             <div className="hidden lg:col-span-5 lg:block">
               <Reveal direction="right" delay={150}>
                 <DonateHeroVisual t={t} />
@@ -979,7 +1032,6 @@ export default function DonatePage() {
           </div>
         </div>
 
-        {/* BOTTOM ACCENT */}
         <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-orange-500 via-orange-300 to-blue-500" />
       </section>
 
@@ -992,9 +1044,11 @@ export default function DonatePage() {
         className="relative scroll-mt-24 overflow-hidden bg-[#F5F8FC] py-14 lg:py-20"
       >
         <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          {/* HEADING */}
+
+          {/* SECTION HEADING */}
           <Reveal>
             <div className="mb-10 text-center">
+
               <span className="text-xs font-bold uppercase tracking-[0.14em] text-orange-600">
                 {t.donationLabel}
               </span>
@@ -1013,15 +1067,22 @@ export default function DonatePage() {
             </div>
           </Reveal>
 
-          {/* TWO COLUMNS */}
+          {/* TWO COLUMN LAYOUT */}
           <div className="grid items-start gap-7 lg:grid-cols-12">
-            {/* LEFT BANK DETAILS */}
+
+            {/* ================================= */}
+            {/* LEFT — BANK DETAILS */}
+            {/* ================================= */}
+
             <div className="min-w-0 lg:col-span-7">
               <Reveal direction="left">
+
                 <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_12px_40px_rgba(6,27,80,0.06)]">
+
                   {/* BANK HEADER */}
                   <div className="border-b border-slate-200 bg-white px-5 py-6 sm:px-7">
                     <div className="flex items-center gap-4">
+
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
                         <Landmark className="h-6 w-6" />
                       </div>
@@ -1038,7 +1099,7 @@ export default function DonatePage() {
                     </div>
                   </div>
 
-                  {/* FOUR GROUPS - NO ADDITIONAL INFO */}
+                  {/* BANK DETAIL GROUPS */}
                   {groups.map((group) => (
                     <DetailGroup
                       key={group.title}
@@ -1052,25 +1113,33 @@ export default function DonatePage() {
               </Reveal>
             </div>
 
-            {/* RIGHT QR + ADDITIONAL CONTENT */}
+            {/* ================================= */}
+            {/* RIGHT — UPI + QR + HELP */}
+            {/* ================================= */}
+
             <div className="min-w-0 space-y-5 lg:col-span-5">
-              {/* QR */}
+
+              {/* QUICK UPI DONATION */}
+              <Reveal direction="right" delay={50}>
+                <QuickUPIDonation t={t} />
+              </Reveal>
+
+              {/* EXISTING QR CODE */}
               <Reveal direction="right" delay={100}>
                 <DonationQR t={t} />
               </Reveal>
 
-              
 
-              {/* HELP */}
-              <Reveal direction="up" delay={200}>
-                <DonationHelp t={t} />
-              </Reveal>
             </div>
           </div>
 
-          {/* IMPORTANT NOTE */}
-          <Reveal direction="up" delay={150}>
+          {/* ================================= */}
+          {/* IMPORTANT PAYMENT INFORMATION */}
+          {/* ================================= */}
+
+          <Reveal delay={150}>
             <div className="mt-9 flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 px-5 py-5 sm:px-6">
+
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-orange-600" />
 
               <div>
@@ -1086,8 +1155,9 @@ export default function DonatePage() {
           </Reveal>
 
           {/* THANK YOU */}
-          <Reveal direction="up" delay={200}>
+          <Reveal delay={200}>
             <div className="mx-auto mt-12 max-w-3xl text-center">
+
               <BadgeCheck className="mx-auto h-9 w-9 text-green-600" />
 
               <p className="mt-4 text-lg font-bold leading-8 text-[#061B50] sm:text-xl">
@@ -1107,8 +1177,6 @@ export default function DonatePage() {
       {/* ===================================== */}
 
       <style>{`
-        /* BACKGROUND FLOAT */
-
         @keyframes donateBackgroundFloat {
           0%, 100% {
             transform: translate(0, 0);
@@ -1124,19 +1192,15 @@ export default function DonatePage() {
             ease-in-out infinite;
         }
 
-        /* HERO MAIN HEART FLOAT */
-
         @keyframes donateMainHeartFloat {
           0%, 100% {
             transform:
-              translate(-50%, -50%)
-              rotate(-4deg);
+              translate(-50%, -50%) rotate(-4deg);
           }
 
           50% {
             transform:
-              translate(-50%, -56%)
-              rotate(4deg);
+              translate(-50%, -56%) rotate(4deg);
           }
         }
 
@@ -1144,8 +1208,6 @@ export default function DonatePage() {
           animation: donateMainHeartFloat 5s
             ease-in-out infinite;
         }
-
-        /* CENTER GLOW */
 
         @keyframes donateHeroGlow {
           0%, 100% {
@@ -1162,8 +1224,6 @@ export default function DonatePage() {
             ease-in-out infinite;
         }
 
-        /* RING BREATHING */
-
         @keyframes donateRingPulse {
           0%, 100% {
             opacity: 0.3;
@@ -1178,12 +1238,6 @@ export default function DonatePage() {
           animation: donateRingPulse 5s
             ease-in-out infinite;
         }
-
-        #donate-hero .donate-orbit-ring-2 {
-          animation-delay: 1.4s;
-        }
-
-        /* ORBIT ROTATION */
 
         @keyframes donateOrbitRotate {
           from {
@@ -1202,8 +1256,6 @@ export default function DonatePage() {
             linear infinite;
         }
 
-        /* FLOATING LABELS */
-
         @keyframes donateFloatingBadge {
           0%, 100% {
             transform: translateY(0);
@@ -1219,38 +1271,19 @@ export default function DonatePage() {
             ease-in-out infinite;
         }
 
-        #donate-hero .donate-float-two {
+        #donate-hero .donate-hero-float:nth-child(2) {
           animation-delay: 1.1s;
         }
 
-        #donate-hero .donate-float-three {
-          animation-delay: 2s;
-        }
-
-        /* PARTICLES */
-
-        @keyframes donateParticlePulse {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
+        @keyframes donateButtonShine {
+          from {
+            transform: translateX(-160%);
           }
 
-          50% {
-            opacity: 1;
-            transform: scale(1.5);
+          to {
+            transform: translateX(160%);
           }
         }
-
-        #donate-hero .donate-particle {
-          animation: donateParticlePulse 3s
-            ease-in-out infinite;
-        }
-
-        #donate-hero .donate-particle-delay {
-          animation-delay: 1.5s;
-        }
-
-        /* CTA BUTTON SHINE */
 
         #donate-hero .donate-button-shine {
           background: linear-gradient(
@@ -1271,8 +1304,6 @@ export default function DonatePage() {
           transform: translateX(160%);
         }
 
-        /* QR HOVER */
-
         #donation-details .donate-qr-image {
           transition:
             transform 450ms ease,
@@ -1286,26 +1317,13 @@ export default function DonatePage() {
             0 24px 45px rgba(0,0,0,0.22);
         }
 
-        /* STEPS HOVER */
-
-        #donation-details .donate-step-item svg {
-          transition: transform 350ms ease;
-        }
-
-        #donation-details .donate-step-item:hover svg {
-          transform: translateY(-3px) scale(1.1);
-        }
-
-        /* KEYBOARD FOCUS */
-
         #donate-hero a:focus-visible,
         #donation-details a:focus-visible,
-        #donation-details button:focus-visible {
+        #donation-details button:focus-visible,
+        #donation-details input:focus-visible {
           outline: 3px solid #fb923c;
-          outline-offset: 4px;
+          outline-offset: 3px;
         }
-
-        /* REDUCED MOTION */
 
         @media (prefers-reduced-motion: reduce) {
           #donate-hero .donate-bg-orb,
@@ -1313,8 +1331,7 @@ export default function DonatePage() {
           #donate-hero .donate-hero-glow,
           #donate-hero .donate-orbit-ring,
           #donate-hero .donate-rotating-orbit,
-          #donate-hero .donate-hero-float,
-          #donate-hero .donate-particle {
+          #donate-hero .donate-hero-float {
             animation: none !important;
           }
 
