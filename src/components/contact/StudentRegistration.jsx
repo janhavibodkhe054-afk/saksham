@@ -1,6 +1,5 @@
 
 import React, { useEffect, useRef, useState } from "react";
-
 import {
   UserRound,
   Phone,
@@ -9,18 +8,18 @@ import {
   CheckCircle2,
   ShieldCheck,
   ClipboardList,
-  MessageCircle,
+  Mail,
   ExternalLink,
 } from "lucide-react";
 
 import { useLanguage } from "../../context/LanguageContext";
 
 // ==========================================
-// WHATSAPP CONFIGURATION
+// EMAIL CONFIGURATION
 // ==========================================
 
-// Country code 91 + mobile number
-const WHATSAPP_NUMBER = "918830223458";
+const FOUNDATION_EMAIL =
+  "sakshamfoundationsmartskills@gmail.com";
 
 // ==========================================
 // ENGLISH + MARATHI TRANSLATIONS
@@ -118,20 +117,20 @@ const translations = {
       "I consent to being contacted by Saksham Foundation through phone or other contact methods regarding my registration, training enquiries and relevant enrolment information.",
 
     privacyNotice:
-      "Your details will be included in the WhatsApp message.",
+      "Your information will be included in an email draft. You must press Send in your email app to complete the enquiry.",
 
-    submit: "Submit via WhatsApp",
+    submit: "Submit via Email",
+
+    emailNotice:
+      "Your email app will open with your registration details. Please review the email and press Send to submit your registration.",
+
+    emailFallback:
+      "If your email app did not open, use the button below.",
+
+    emailFallbackLink: "Open Email App",
 
     bottomNotice:
       "Registration is an expression of interest and does not automatically confirm admission to a training program.",
-
-    whatsappNotice:
-      "WhatsApp will open with your completed registration details. Please press Send to submit your enquiry.",
-
-    whatsappFallback:
-      "If WhatsApp did not open, tap here to continue.",
-
-    whatsappFallbackLink: "Open WhatsApp",
 
     notSpecified: "Not specified",
     noMessage: "No additional message",
@@ -228,20 +227,20 @@ const translations = {
       "माझी नोंदणी, प्रशिक्षणासंबंधी चौकशी आणि प्रवेश प्रक्रियेबाबत माहिती देण्यासाठी सक्षम फाउंडेशनने माझ्याशी फोन किंवा इतर संपर्क माध्यमांद्वारे संपर्क साधण्यास मी संमती देत आहे.",
 
     privacyNotice:
-      "तुमची माहिती WhatsApp संदेशामध्ये समाविष्ट असेल.",
+      "तुमची माहिती Email Draft मध्ये समाविष्ट असेल. नोंदणी पाठवण्यासाठी Email App मध्ये Send दाबणे आवश्यक आहे.",
 
-    submit: "WhatsApp वर नोंदणी पाठवा",
+    submit: "Email द्वारे नोंदणी पाठवा",
+
+    emailNotice:
+      "तुमची भरलेली माहिती Email App मध्ये उघडेल. नोंदणी पाठवण्यासाठी Email तपासून Send बटण दाबा.",
+
+    emailFallback:
+      "Email App उघडले नसल्यास खालील बटण वापरा.",
+
+    emailFallbackLink: "Email App उघडा",
 
     bottomNotice:
       "हा फॉर्म भरल्याने प्रशिक्षणासाठी इच्छुक असल्याची नोंद होते. यामुळे प्रशिक्षण कार्यक्रमातील प्रवेश आपोआप निश्चित होत नाही.",
-
-    whatsappNotice:
-      "तुमची भरलेली माहिती WhatsApp वर उघडेल. चौकशी पाठवण्यासाठी Send बटण दाबा.",
-
-    whatsappFallback:
-      "WhatsApp उघडले नसल्यास येथे क्लिक करा.",
-
-    whatsappFallbackLink: "WhatsApp उघडा",
 
     notSpecified: "माहिती दिलेली नाही",
     noMessage: "अतिरिक्त संदेश नाही",
@@ -362,10 +361,7 @@ function Reveal({
 
     return () => {
       observer.disconnect();
-      query.removeEventListener?.(
-        "change",
-        updateMotion
-      );
+      query.removeEventListener?.("change", updateMotion);
     };
   }, []);
 
@@ -419,23 +415,19 @@ export default function StudentRegistration() {
 
   const [form, setForm] = useState(initialForm);
 
-  const [whatsappUrl, setWhatsappUrl] = useState("");
-
-  const [whatsappOpened, setWhatsappOpened] =
-    useState(false);
+  const [emailUrl, setEmailUrl] = useState("");
+  const [emailOpened, setEmailOpened] = useState(false);
 
   // ========================================
   // HANDLE INPUT CHANGES
   // ========================================
 
   const updateField = (event) => {
-    const { name, value, type, checked } =
-      event.target;
+    const { name, value, type, checked } = event.target;
 
     let updatedValue =
       type === "checkbox" ? checked : value;
 
-    // Accept only digits for mobile number
     if (name === "mobile") {
       updatedValue = value
         .replace(/\D/g, "")
@@ -447,29 +439,24 @@ export default function StudentRegistration() {
       [name]: updatedValue,
     }));
 
-    // Previous WhatsApp message must not
-    // remain available after edits.
-    setWhatsappUrl("");
-    setWhatsappOpened(false);
+    // Clear previous draft after edits
+    setEmailUrl("");
+    setEmailOpened(false);
   };
 
   // ========================================
-  // BUILD WHATSAPP MESSAGE
+  // BUILD EMAIL CONTENT
   // ========================================
 
-  const buildWhatsAppMessage = () => {
-    const genderIndex =
-      genderValues.indexOf(form.gender);
+  const buildEmailContent = () => {
+    const genderIndex = genderValues.indexOf(form.gender);
 
     const qualificationIndex =
-      qualificationValues.indexOf(
-        form.qualification
-      );
+      qualificationValues.indexOf(form.qualification);
 
     const programIndex =
       programValues.indexOf(form.program);
 
-    // Display values using selected language
     const genderText =
       genderIndex >= 0
         ? t.genderOptions[genderIndex]
@@ -477,9 +464,7 @@ export default function StudentRegistration() {
 
     const qualificationText =
       qualificationIndex >= 0
-        ? t.qualificationOptions[
-            qualificationIndex
-          ]
+        ? t.qualificationOptions[qualificationIndex]
         : form.qualification;
 
     const programText =
@@ -487,60 +472,74 @@ export default function StudentRegistration() {
         ? t.programOptions[programIndex]
         : form.program;
 
-    const message =
+    const subject =
+      `New Student Registration - ${form.fullName.trim()} - Saksham Foundation`;
+
+    const submittedAt = new Date().toLocaleString(
+      language === "mr" ? "mr-IN" : "en-IN",
+      {
+        timeZone: "Asia/Kolkata",
+        dateStyle: "medium",
+        timeStyle: "short",
+      }
+    );
+
+    const body =
       language === "mr"
         ? [
-            "*सक्षम फाउंडेशन*",
-            "*नवीन विद्यार्थी नोंदणी*",
+            "सक्षम फाउंडेशन",
+            "नवीन विद्यार्थी नोंदणी",
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            `*संपूर्ण नाव:* ${form.fullName.trim()}`,
-            `*मोबाईल क्रमांक:* ${form.mobile}`,
-            `*वय:* ${form.age}`,
-            `*लिंग:* ${genderText}`,
-            `*शहर / परिसर:* ${form.city.trim()}`,
-            `*शैक्षणिक पात्रता:* ${qualificationText}`,
-            `*इच्छित प्रशिक्षण:* ${programText}`,
+            `संपूर्ण नाव: ${form.fullName.trim()}`,
+            `मोबाईल क्रमांक: ${form.mobile}`,
+            `वय: ${form.age}`,
+            `लिंग: ${genderText}`,
+            `शहर / परिसर: ${form.city.trim()}`,
+            `शैक्षणिक पात्रता: ${qualificationText}`,
+            `इच्छित प्रशिक्षण: ${programText}`,
             "",
-            "*अतिरिक्त संदेश:*",
+            "अतिरिक्त संदेश:",
             form.message.trim() || t.noMessage,
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            "*संपर्कासाठी संमती:* होय",
+            "संपर्कासाठी संमती: होय",
+            `नोंदणी तारीख आणि वेळ: ${submittedAt}`,
             "",
             "कृपया मला प्रशिक्षण व प्रवेश प्रक्रियेबाबत मार्गदर्शन करावे.",
           ].join("\n")
         : [
-            "*SAKSHAM FOUNDATION*",
-            "*NEW STUDENT REGISTRATION*",
+            "SAKSHAM FOUNDATION",
+            "NEW STUDENT REGISTRATION",
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            `*Full Name:* ${form.fullName.trim()}`,
-            `*Mobile Number:* ${form.mobile}`,
-            `*Age:* ${form.age}`,
-            `*Gender:* ${genderText}`,
-            `*City / Area:* ${form.city.trim()}`,
-            `*Qualification:* ${qualificationText}`,
-            `*Interested Program:* ${programText}`,
+            `Full Name: ${form.fullName.trim()}`,
+            `Mobile Number: ${form.mobile}`,
+            `Age: ${form.age}`,
+            `Gender: ${genderText}`,
+            `City / Area: ${form.city.trim()}`,
+            `Educational Qualification: ${qualificationText}`,
+            `Interested Training Program: ${programText}`,
             "",
-            "*Additional Message:*",
+            "Additional Message:",
             form.message.trim() || t.noMessage,
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            "*Consent to be contacted:* Yes",
+            "Consent to be contacted: Yes",
+            `Registration Date & Time: ${submittedAt}`,
             "",
             "Please guide me regarding training and the admission process.",
           ].join("\n");
 
-    return message;
+    return { subject, body };
   };
 
   // ========================================
-  // HANDLE WHATSAPP SUBMISSION
+  // HANDLE EMAIL SUBMISSION
   // ========================================
 
   const handleSubmit = (event) => {
@@ -548,7 +547,6 @@ export default function StudentRegistration() {
 
     if (!form.consent) return;
 
-    // Additional mobile validation
     const mobileIsValid =
       /^[6-9]\d{9}$/.test(form.mobile);
 
@@ -560,22 +558,18 @@ export default function StudentRegistration() {
       return;
     }
 
-    const message = buildWhatsAppMessage();
+    const { subject, body } = buildEmailContent();
 
-    const url =
-      `https://wa.me/${WHATSAPP_NUMBER}` +
-      `?text=${encodeURIComponent(message)}`;
+   const url =
+  "https://mail.google.com/mail/?view=cm&fs=1" +
+  `&to=${encodeURIComponent(FOUNDATION_EMAIL)}` +
+  `&su=${encodeURIComponent(subject)}` +
+  `&body=${encodeURIComponent(body)}`;
 
-    setWhatsappUrl(url);
-    setWhatsappOpened(true);
+setEmailUrl(url);
+setEmailOpened(true);
 
-    // Open WhatsApp using direct submit action.
-    // Fallback link is shown if popups are blocked.
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
-    );
+window.open(url, "_blank", "noopener,noreferrer");
   };
 
   // ========================================
@@ -603,9 +597,7 @@ export default function StudentRegistration() {
       aria-labelledby="registration-heading"
       className="relative scroll-mt-28 overflow-hidden bg-[#F3F7FC] py-14 lg:py-20"
     >
-      {/* ==================================== */}
       {/* ANIMATED BACKGROUND */}
-      {/* ==================================== */}
 
       <div
         aria-hidden="true"
@@ -620,17 +612,11 @@ export default function StudentRegistration() {
 
         <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
 
-          {/* ================================= */}
           {/* LEFT INFORMATION */}
-          {/* ================================= */}
 
           <div className="lg:sticky lg:top-24 lg:col-span-4">
 
-            {/* SECTION LABEL */}
-            <Reveal
-              direction="left"
-              duration={850}
-            >
+            <Reveal direction="left" duration={850}>
               <div className="mb-5 flex items-center gap-3">
 
                 <span className="saksham-reg-label-line h-0.5 w-8 bg-orange-500" />
@@ -642,12 +628,7 @@ export default function StudentRegistration() {
               </div>
             </Reveal>
 
-            {/* HEADING */}
-            <Reveal
-              direction="up"
-              delay={100}
-              duration={1050}
-            >
+            <Reveal direction="up" delay={100} duration={1050}>
               <h2
                 id="registration-heading"
                 className="text-3xl font-extrabold leading-tight tracking-tight text-[#061B50] sm:text-4xl"
@@ -660,27 +641,19 @@ export default function StudentRegistration() {
               </h2>
             </Reveal>
 
-            {/* DESCRIPTION */}
-            <Reveal
-              direction="up"
-              delay={200}
-              duration={950}
-            >
+            <Reveal direction="up" delay={200} duration={950}>
               <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base">
                 {t.description}
               </p>
             </Reveal>
 
-            {/* ================================= */}
-            {/* THREE BENEFITS */}
-            {/* ================================= */}
+            {/* BENEFITS */}
 
             <div className="mt-8 space-y-6">
 
               {t.benefits.map((benefit, index) => {
                 const Icon = benefitIcons[index].icon;
-                const color =
-                  benefitIcons[index].color;
+                const color = benefitIcons[index].color;
 
                 return (
                   <Reveal
@@ -691,7 +664,6 @@ export default function StudentRegistration() {
                   >
                     <div className="saksham-reg-benefit group flex items-start gap-4">
 
-                      {/* BENEFIT ICON */}
                       <div
                         className={`saksham-reg-benefit-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md ${color}`}
                       >
@@ -715,15 +687,9 @@ export default function StudentRegistration() {
 
             </div>
 
-            {/* ================================= */}
-            {/* CONTACT NOTE */}
-            {/* ================================= */}
+            {/* CONTACT */}
 
-            <Reveal
-              direction="up"
-              delay={150}
-              duration={850}
-            >
+            <Reveal direction="up" delay={150} duration={850}>
               <div className="mt-9 border-t border-slate-200 pt-6">
 
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -744,9 +710,7 @@ export default function StudentRegistration() {
 
           </div>
 
-          {/* ================================= */}
           {/* RIGHT REGISTRATION FORM */}
-          {/* ================================= */}
 
           <div className="lg:col-span-8">
 
@@ -757,24 +721,19 @@ export default function StudentRegistration() {
             >
               <div className="saksham-reg-form-card group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_12px_45px_rgba(6,27,80,0.06)]">
 
-                {/* CARD MIRROR SHINE */}
                 <span
                   aria-hidden="true"
                   className="saksham-reg-card-shine pointer-events-none absolute inset-0 z-10"
                 />
 
-                {/* ================================= */}
                 {/* FORM HEADER */}
-                {/* ================================= */}
 
                 <div className="relative z-20 border-b border-slate-100 px-6 py-6 sm:px-9">
 
                   <div className="flex items-center gap-3">
 
                     <div className="saksham-reg-header-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
-
                       <UserRound className="h-5 w-5" />
-
                     </div>
 
                     <div>
@@ -791,17 +750,17 @@ export default function StudentRegistration() {
 
                 </div>
 
-                {/* ================================= */}
                 {/* FORM BODY */}
-                {/* ================================= */}
 
                 <form
                   onSubmit={handleSubmit}
                   className="relative z-20 space-y-6 px-6 py-7 sm:px-9 sm:py-9"
                 >
+
                   <div className="grid gap-5 sm:grid-cols-2">
 
                     {/* FULL NAME */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-full-name"
@@ -826,6 +785,7 @@ export default function StudentRegistration() {
                     </div>
 
                     {/* MOBILE */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-mobile"
@@ -853,6 +813,7 @@ export default function StudentRegistration() {
                     </div>
 
                     {/* AGE */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-age"
@@ -877,6 +838,7 @@ export default function StudentRegistration() {
                     </div>
 
                     {/* GENDER */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-gender"
@@ -899,20 +861,16 @@ export default function StudentRegistration() {
                           {t.genderPlaceholder}
                         </option>
 
-                        {genderValues.map(
-                          (value, index) => (
-                            <option
-                              key={value}
-                              value={value}
-                            >
-                              {t.genderOptions[index]}
-                            </option>
-                          )
-                        )}
+                        {genderValues.map((value, index) => (
+                          <option key={value} value={value}>
+                            {t.genderOptions[index]}
+                          </option>
+                        ))}
                       </select>
                     </div>
 
                     {/* CITY */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-city"
@@ -936,6 +894,7 @@ export default function StudentRegistration() {
                     </div>
 
                     {/* QUALIFICATION */}
+
                     <div className="saksham-reg-field">
                       <label
                         htmlFor="reg-qualification"
@@ -957,28 +916,17 @@ export default function StudentRegistration() {
                           {t.qualificationPlaceholder}
                         </option>
 
-                        {qualificationValues.map(
-                          (value, index) => (
-                            <option
-                              key={value}
-                              value={value}
-                            >
-                              {
-                                t.qualificationOptions[
-                                  index
-                                ]
-                              }
-                            </option>
-                          )
-                        )}
+                        {qualificationValues.map((value, index) => (
+                          <option key={value} value={value}>
+                            {t.qualificationOptions[index]}
+                          </option>
+                        ))}
                       </select>
                     </div>
 
                   </div>
 
-                  {/* ================================= */}
                   {/* TRAINING PROGRAM */}
-                  {/* ================================= */}
 
                   <div className="saksham-reg-field">
                     <label
@@ -1001,16 +949,11 @@ export default function StudentRegistration() {
                         {t.programPlaceholder}
                       </option>
 
-                      {programValues.map(
-                        (value, index) => (
-                          <option
-                            key={value}
-                            value={value}
-                          >
-                            {t.programOptions[index]}
-                          </option>
-                        )
-                      )}
+                      {programValues.map((value, index) => (
+                        <option key={value} value={value}>
+                          {t.programOptions[index]}
+                        </option>
+                      ))}
                     </select>
 
                     <p className="mt-2 text-xs leading-5 text-slate-500">
@@ -1018,9 +961,7 @@ export default function StudentRegistration() {
                     </p>
                   </div>
 
-                  {/* ================================= */}
                   {/* MESSAGE */}
-                  {/* ================================= */}
 
                   <div className="saksham-reg-field">
                     <label
@@ -1045,9 +986,7 @@ export default function StudentRegistration() {
                     />
                   </div>
 
-                  {/* ================================= */}
                   {/* CONSENT */}
-                  {/* ================================= */}
 
                   <div className="saksham-reg-consent rounded-xl bg-[#F3F7FC] px-4 py-4">
 
@@ -1074,14 +1013,11 @@ export default function StudentRegistration() {
 
                   </div>
 
-                  {/* ================================= */}
                   {/* SUBMIT AREA */}
-                  {/* ================================= */}
 
                   <div className="flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
 
-                    {/* PRIVACY NOTICE */}
-                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                    <div className="flex items-start gap-2 text-xs text-slate-500">
 
                       <ShieldCheck className="h-4 w-4 shrink-0 text-green-700" />
 
@@ -1089,62 +1025,58 @@ export default function StudentRegistration() {
 
                     </div>
 
-                    {/* WHATSAPP BUTTON */}
                     <button
                       type="submit"
                       className="saksham-reg-submit group relative inline-flex min-h-12 items-center justify-center gap-3 overflow-hidden rounded-lg bg-orange-600 px-7 py-3 text-sm font-bold text-white shadow-[0_10px_25px_rgba(234,88,12,0.14)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-700 hover:shadow-[0_15px_30px_rgba(234,88,12,0.22)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                     >
-                      {/* BUTTON SHINE */}
                       <span
                         aria-hidden="true"
                         className="saksham-reg-button-shine pointer-events-none absolute inset-0"
                       />
 
-                      <MessageCircle className="relative z-10 h-5 w-5" />
+                      <Mail className="relative z-10 h-5 w-5" />
 
                       <span className="relative z-10">
                         {t.submit}
                       </span>
 
                       <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-
                     </button>
 
                   </div>
 
-                  {/* WHATSAPP INSTRUCTIONS */}
-                  <div className="rounded-lg border border-green-100 bg-green-50/70 px-4 py-3">
+                  {/* EMAIL INSTRUCTIONS */}
+
+                  <div className="rounded-lg border border-blue-100 bg-blue-50/70 px-4 py-3">
 
                     <div className="flex items-start gap-2">
 
-                      <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
 
-                      <p className="text-xs leading-6 text-green-800">
-                        {t.whatsappNotice}
+                      <p className="text-xs leading-6 text-blue-800">
+                        {t.emailNotice}
                       </p>
 
                     </div>
 
                   </div>
 
-                  {/* WHATSAPP FALLBACK LINK */}
-                  {whatsappOpened && whatsappUrl && (
+                  {/* EMAIL FALLBACK */}
+
+                  {emailOpened && emailUrl && (
                     <div
                       className="saksham-reg-opened rounded-lg border border-orange-200 bg-orange-50 px-4 py-4"
                       role="status"
                     >
                       <p className="text-sm font-medium text-[#061B50]">
-                        {t.whatsappFallback}
+                        {t.emailFallback}
                       </p>
 
                       <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={emailUrl}
                         className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-orange-700 underline underline-offset-4 transition-colors hover:text-orange-900"
                       >
-                        {t.whatsappFallbackLink}
-
+                        {t.emailFallbackLink}
                         <ExternalLink className="h-4 w-4" />
                       </a>
 
@@ -1156,15 +1088,9 @@ export default function StudentRegistration() {
               </div>
             </Reveal>
 
-            {/* ================================= */}
             {/* BOTTOM NOTICE */}
-            {/* ================================= */}
 
-            <Reveal
-              direction="up"
-              delay={200}
-              duration={850}
-            >
+            <Reveal direction="up" delay={200} duration={850}>
               <p className="mt-4 text-center text-xs leading-6 text-slate-500">
                 {t.bottomNotice}
               </p>
@@ -1175,20 +1101,15 @@ export default function StudentRegistration() {
         </div>
       </div>
 
-      {/* ==================================== */}
-      {/* ALL ANIMATIONS IN SAME COMPONENT */}
-      {/* ==================================== */}
+      {/* ====================================
+          ANIMATIONS
+      ==================================== */}
 
       <style>{`
-        /* ==========================
-           BACKGROUND FLOAT
-        ========================== */
-
         @keyframes sakshamRegBgBlue {
           0%, 100% {
             transform: translate(0, 0);
           }
-
           50% {
             transform: translate(-30px, 25px);
           }
@@ -1198,7 +1119,6 @@ export default function StudentRegistration() {
           0%, 100% {
             transform: translate(0, 0);
           }
-
           50% {
             transform: translate(30px, -20px);
           }
@@ -1214,15 +1134,10 @@ export default function StudentRegistration() {
             ease-in-out infinite;
         }
 
-        /* ==========================
-           LABEL LINE REVEAL
-        ========================== */
-
         @keyframes sakshamRegLabelLine {
           from {
             transform: scaleX(0);
           }
-
           to {
             transform: scaleX(1);
           }
@@ -1230,14 +1145,9 @@ export default function StudentRegistration() {
 
         #register .saksham-reg-label-line {
           transform-origin: left center;
-
           animation: sakshamRegLabelLine 950ms
             cubic-bezier(0.22, 1, 0.36, 1) both;
         }
-
-        /* ==========================
-           BENEFIT ICON HOVER
-        ========================== */
 
         #register .saksham-reg-benefit-icon svg {
           transition: transform 400ms
@@ -1249,10 +1159,6 @@ export default function StudentRegistration() {
           transform: translateY(-3px) scale(1.12);
         }
 
-        /* ==========================
-           PHONE HOVER
-        ========================== */
-
         #register .saksham-reg-phone svg {
           transition: transform 350ms ease;
         }
@@ -1260,10 +1166,6 @@ export default function StudentRegistration() {
         #register .saksham-reg-phone:hover svg {
           transform: rotate(-12deg) scale(1.15);
         }
-
-        /* ==========================
-           FORM CARD ELEVATION
-        ========================== */
 
         #register .saksham-reg-form-card {
           transition:
@@ -1273,14 +1175,9 @@ export default function StudentRegistration() {
 
         #register .saksham-reg-form-card:hover {
           border-color: rgba(249,115,22,0.18);
-
           box-shadow:
             0 22px 60px rgba(6,27,80,0.09);
         }
-
-        /* ==========================
-           CARD MIRROR SHINE
-        ========================== */
 
         #register .saksham-reg-card-shine {
           background: linear-gradient(
@@ -1307,26 +1204,19 @@ export default function StudentRegistration() {
             opacity: 0;
             transform: translateX(-165%);
           }
-
           25% {
             opacity: 0.7;
           }
-
           100% {
             opacity: 0;
             transform: translateX(165%);
           }
         }
 
-        /* ==========================
-           FORM HEADER ICON
-        ========================== */
-
         @keyframes sakshamRegHeaderIcon {
           0%, 100% {
             transform: translateY(0);
           }
-
           50% {
             transform: translateY(-4px);
           }
@@ -1336,10 +1226,6 @@ export default function StudentRegistration() {
           animation: sakshamRegHeaderIcon 4s
             ease-in-out infinite;
         }
-
-        /* ==========================
-           INPUT HOVER + FOCUS
-        ========================== */
 
         #register .saksham-reg-input {
           transition:
@@ -1356,10 +1242,8 @@ export default function StudentRegistration() {
 
         #register .saksham-reg-input:focus {
           border-color: #f97316;
-
           box-shadow:
             0 0 0 4px rgba(249,115,22,0.1);
-
           transform: translateY(-1px);
         }
 
@@ -1370,10 +1254,6 @@ export default function StudentRegistration() {
         #register .saksham-reg-field:focus-within label {
           color: #ea580c;
         }
-
-        /* ==========================
-           CONSENT HOVER
-        ========================== */
 
         #register .saksham-reg-consent {
           transition:
@@ -1386,10 +1266,6 @@ export default function StudentRegistration() {
           box-shadow:
             0 5px 20px rgba(6,27,80,0.04);
         }
-
-        /* ==========================
-           WHATSAPP BUTTON SHINE
-        ========================== */
 
         #register .saksham-reg-button-shine {
           background: linear-gradient(
@@ -1410,30 +1286,11 @@ export default function StudentRegistration() {
           transform: translateX(160%);
         }
 
-        /* ==========================
-           WHATSAPP BUTTON ICON
-        ========================== */
-
-        #register .saksham-reg-submit
-        > svg:first-of-type {
-          transition: transform 350ms ease;
-        }
-
-        #register .saksham-reg-submit:hover
-        > svg:first-of-type {
-          transform: rotate(-8deg) scale(1.12);
-        }
-
-        /* ==========================
-           FALLBACK LINK REVEAL
-        ========================== */
-
         @keyframes sakshamRegOpened {
           from {
             opacity: 0;
             transform: translateY(12px);
           }
-
           to {
             opacity: 1;
             transform: translateY(0);
@@ -1441,22 +1298,15 @@ export default function StudentRegistration() {
         }
 
         #register .saksham-reg-opened {
-          animation: sakshamRegOpened 500ms ease-out both;
+          animation: sakshamRegOpened 500ms
+            ease-out both;
         }
-
-        /* ==========================
-           ACCESSIBILITY
-        ========================== */
 
         #register a:focus-visible,
         #register button:focus-visible {
           outline: 2px solid #ea580c;
           outline-offset: 4px;
         }
-
-        /* ==========================
-           REDUCED MOTION
-        ========================== */
 
         @media (prefers-reduced-motion: reduce) {
           #register .saksham-reg-bg-blue,
@@ -1476,7 +1326,6 @@ export default function StudentRegistration() {
           }
         }
       `}</style>
-
     </section>
   );
 }

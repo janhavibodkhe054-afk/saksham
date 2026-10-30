@@ -1,6 +1,5 @@
 
 import React, { useEffect, useRef, useState } from "react";
-
 import {
   Building2,
   Handshake,
@@ -10,17 +9,17 @@ import {
   Phone,
   ShieldCheck,
   MapPin,
-  MessageCircle,
   ExternalLink,
 } from "lucide-react";
 
 import { useLanguage } from "../../context/LanguageContext";
 
 // ==========================================
-// WHATSAPP CONFIGURATION
+// GMAIL CONFIGURATION
 // ==========================================
 
-const WHATSAPP_NUMBER = "918830223458";
+const FOUNDATION_EMAIL =
+  "sakshamfoundationsmartskills@gmail.com";
 
 // ==========================================
 // ENGLISH + MARATHI TRANSLATIONS
@@ -51,6 +50,7 @@ const translations = {
     directContact: "DIRECT CONTACT",
 
     formTitle: "Partnership Enquiry Form",
+
     formDescription:
       "Share your organization's details and project requirements with us.",
 
@@ -86,24 +86,25 @@ const translations = {
     locationPlaceholder: "e.g. Pune, Maharashtra",
 
     requirements: "Project Requirements / Message",
+
     requirementsPlaceholder:
       "Tell us about your proposed CSR initiative, project objectives, target beneficiaries, location or partnership requirements...",
 
     privacyNotice:
-      "Your details will be included in the WhatsApp enquiry message.",
+      "Your details will be included in a Gmail draft. Please press Send in Gmail to submit your enquiry.",
 
-    submit: "Send Enquiry via WhatsApp",
+    submit: "Send Enquiry via Gmail",
 
     bottomNotice:
       "Submitting an enquiry does not constitute a confirmed partnership or project commitment.",
 
-    whatsappNotice:
-      "WhatsApp will open with your enquiry details. Press Send in WhatsApp to submit your enquiry.",
+    gmailNotice:
+      "Gmail will open with your enquiry details. Review the email and press Send to submit your enquiry.",
 
-    whatsappFallback:
-      "If WhatsApp did not open, use the link below.",
+    gmailFallback:
+      "If Gmail did not open, use the link below.",
 
-    whatsappFallbackLink: "Open WhatsApp",
+    gmailFallbackLink: "Open Gmail",
 
     optional: "(Optional)",
     notProvided: "Not provided",
@@ -134,6 +135,7 @@ const translations = {
     directContact: "थेट संपर्क",
 
     formTitle: "भागीदारी चौकशी फॉर्म",
+
     formDescription:
       "तुमच्या संस्थेची माहिती आणि प्रस्तावित प्रकल्पाच्या गरजा आमच्यासोबत शेअर करा.",
 
@@ -169,24 +171,25 @@ const translations = {
     locationPlaceholder: "उदा. पुणे, महाराष्ट्र",
 
     requirements: "प्रकल्पाच्या गरजा / संदेश",
+
     requirementsPlaceholder:
       "प्रस्तावित CSR उपक्रम, प्रकल्पाची उद्दिष्टे, लाभार्थी, ठिकाण किंवा भागीदारीसंबंधी गरजांची माहिती लिहा...",
 
     privacyNotice:
-      "तुमची माहिती WhatsApp चौकशी संदेशामध्ये समाविष्ट असेल.",
+      "तुमची माहिती Gmail Draft मध्ये समाविष्ट असेल. चौकशी पाठवण्यासाठी Gmail मध्ये Send दाबा.",
 
-    submit: "WhatsApp वर चौकशी पाठवा",
+    submit: "Gmail द्वारे चौकशी पाठवा",
 
     bottomNotice:
       "चौकशी पाठवल्याने भागीदारी किंवा प्रकल्पाची निश्चित मंजुरी झाल्याचे मानले जाणार नाही.",
 
-    whatsappNotice:
-      "तुमची माहिती WhatsApp वर उघडेल. चौकशी पाठवण्यासाठी Send दाबा.",
+    gmailNotice:
+      "तुमची माहिती Gmail मध्ये उघडेल. चौकशी पाठवण्यासाठी माहिती तपासून Send दाबा.",
 
-    whatsappFallback:
-      "WhatsApp उघडले नसल्यास खालील लिंक वापरा.",
+    gmailFallback:
+      "Gmail उघडले नसल्यास खालील लिंक वापरा.",
 
-    whatsappFallbackLink: "WhatsApp उघडा",
+    gmailFallbackLink: "Gmail उघडा",
 
     optional: "(ऐच्छिक)",
     notProvided: "दिलेले नाही",
@@ -352,7 +355,7 @@ export default function CSRPartnershipEnquiry() {
 
   const [form, setForm] = useState(initialForm);
 
-  const [whatsappUrl, setWhatsappUrl] = useState("");
+  const [gmailUrl, setGmailUrl] = useState("");
 
   // ========================================
   // INPUT CHANGE
@@ -366,12 +369,12 @@ export default function CSRPartnershipEnquiry() {
       [name]: value,
     }));
 
-    // Clear older message if fields change.
-    setWhatsappUrl("");
+    // Clear previous Gmail draft link after edits.
+    setGmailUrl("");
   };
 
   // ========================================
-  // WHATSAPP SUBMISSION
+  // GMAIL SUBMISSION
   // ========================================
 
   const handleSubmit = (event) => {
@@ -387,67 +390,95 @@ export default function CSRPartnershipEnquiry() {
         ? t.partnershipTypes[partnershipIndex]
         : form.partnershipType;
 
-    const message =
+    const subject =
+      `New CSR / Partnership Enquiry - ${form.organization.trim()} - Saksham Foundation`;
+
+    const submittedAt = new Date().toLocaleString(
+      language === "mr" ? "mr-IN" : "en-IN",
+      {
+        timeZone: "Asia/Kolkata",
+        dateStyle: "medium",
+        timeStyle: "short",
+      }
+    );
+
+    const body =
       language === "mr"
         ? [
-            "*सक्षम फाउंडेशन*",
-            "*नवीन CSR / भागीदारी चौकशी*",
+            "सक्षम फाउंडेशन",
+            "नवीन CSR / भागीदारी चौकशी",
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            `*संस्थेचे नाव:* ${form.organization.trim()}`,
-            `*संपर्क व्यक्ती:* ${form.contactPerson.trim()}`,
-            `*पदनाम:* ${
+            `संस्थेचे नाव: ${form.organization.trim()}`,
+            `संपर्क व्यक्ती: ${form.contactPerson.trim()}`,
+            `पदनाम: ${
               form.designation.trim() || t.notProvided
             }`,
-            `*ईमेल:* ${form.email.trim()}`,
-            `*मोबाईल:* ${form.mobile.trim()}`,
-            `*भागीदारीचा प्रकार:* ${partnershipText}`,
-            `*प्रकल्पाचे ठिकाण:* ${
+            `ईमेल: ${form.email.trim()}`,
+            `मोबाईल: ${form.mobile.trim()}`,
+            `भागीदारीचा प्रकार: ${partnershipText}`,
+            `प्रकल्पाचे ठिकाण: ${
               form.location.trim() || t.notSpecified
             }`,
             "",
-            "*प्रकल्पाच्या गरजा / संदेश:*",
+            "प्रकल्पाच्या गरजा / संदेश:",
             form.requirements.trim(),
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
+            "",
+            `चौकशी तारीख आणि वेळ: ${submittedAt}`,
             "",
             "कृपया आमच्याशी भागीदारीसंबंधी संपर्क साधावा.",
           ].join("\n")
         : [
-            "*SAKSHAM FOUNDATION*",
-            "*NEW CSR / PARTNERSHIP ENQUIRY*",
+            "SAKSHAM FOUNDATION",
+            "NEW CSR / PARTNERSHIP ENQUIRY",
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
             "",
-            `*Organization Name:* ${form.organization.trim()}`,
-            `*Contact Person:* ${form.contactPerson.trim()}`,
-            `*Designation:* ${
+            `Organization Name: ${form.organization.trim()}`,
+            `Contact Person: ${form.contactPerson.trim()}`,
+            `Designation: ${
               form.designation.trim() || t.notProvided
             }`,
-            `*Email Address:* ${form.email.trim()}`,
-            `*Mobile Number:* ${form.mobile.trim()}`,
-            `*Partnership Type:* ${partnershipText}`,
-            `*Project Location:* ${
+            `Email Address: ${form.email.trim()}`,
+            `Mobile Number: ${form.mobile.trim()}`,
+            `Partnership Type: ${partnershipText}`,
+            `Project Location: ${
               form.location.trim() || t.notSpecified
             }`,
             "",
-            "*PROJECT REQUIREMENTS / MESSAGE:*",
+            "PROJECT REQUIREMENTS / MESSAGE:",
             form.requirements.trim(),
             "",
-            "━━━━━━━━━━━━━━━━",
+            "----------------------------------------",
+            "",
+            `Enquiry Date & Time: ${submittedAt}`,
             "",
             "Please contact us regarding this partnership enquiry.",
           ].join("\n");
 
+    // ======================================
+    // DIRECT GMAIL COMPOSE URL
+    // ======================================
+
     const url =
-      `https://wa.me/${WHATSAPP_NUMBER}` +
-      `?text=${encodeURIComponent(message)}`;
+      "https://mail.google.com/mail/?view=cm&fs=1" +
+      `&to=${encodeURIComponent(FOUNDATION_EMAIL)}` +
+      `&su=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
 
-    setWhatsappUrl(url);
+    // Save fallback URL.
+    setGmailUrl(url);
 
-    // Open a new WhatsApp tab from submit interaction.
-    window.open(url, "_blank", "noopener,noreferrer");
+    // Open Gmail directly in a new tab.
+    // User must click Send in Gmail.
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
   // ========================================
@@ -460,9 +491,7 @@ export default function CSRPartnershipEnquiry() {
       aria-labelledby="csr-enquiry-heading"
       className="relative scroll-mt-28 overflow-hidden bg-[#F7F9FC] py-14 lg:py-20"
     >
-      {/* ==================================== */}
       {/* ANIMATED BACKGROUND */}
-      {/* ==================================== */}
 
       <div
         aria-hidden="true"
@@ -475,9 +504,7 @@ export default function CSRPartnershipEnquiry() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
 
-        {/* ==================================== */}
         {/* SECTION HEADING */}
-        {/* ==================================== */}
 
         <div className="mb-10 text-center lg:mb-12">
 
@@ -524,15 +551,11 @@ export default function CSRPartnershipEnquiry() {
 
         </div>
 
-        {/* ==================================== */}
         {/* MAIN PARTNERSHIP PANEL */}
-        {/* ==================================== */}
 
         <div className="grid items-stretch gap-0 overflow-visible rounded-2xl bg-white shadow-[0_15px_55px_rgba(6,27,80,0.07)] lg:grid-cols-12">
 
-          {/* ================================= */}
           {/* LEFT INFORMATION PANEL */}
-          {/* ================================= */}
 
           <div className="lg:col-span-4">
 
@@ -545,6 +568,7 @@ export default function CSRPartnershipEnquiry() {
               <aside className="csr-sidebar relative h-full overflow-hidden rounded-t-2xl bg-[#061B50] px-6 py-9 text-white sm:px-9 lg:rounded-l-2xl lg:rounded-tr-none lg:px-10 lg:py-12">
 
                 {/* DECORATIVE CIRCLES */}
+
                 <div
                   aria-hidden="true"
                   className="csr-decor-circle pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full border-[35px] border-white/5"
@@ -558,11 +582,13 @@ export default function CSRPartnershipEnquiry() {
                 <div className="relative z-10">
 
                   {/* ICON */}
+
                   <div className="csr-sidebar-icon mb-7 flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 text-orange-400">
                     <Handshake className="h-7 w-7" />
                   </div>
 
                   {/* HEADING */}
+
                   <h3 className="text-2xl font-extrabold leading-snug sm:text-3xl">
                     {t.sidebarHeading1}
 
@@ -572,11 +598,13 @@ export default function CSRPartnershipEnquiry() {
                   </h3>
 
                   {/* DESCRIPTION */}
+
                   <p className="mt-5 text-sm leading-7 text-white/75">
                     {t.sidebarDescription}
                   </p>
 
                   {/* PARTNERSHIP FOCUS */}
+
                   <div className="mt-9 space-y-5">
 
                     {t.partnershipFocus.map(
@@ -602,6 +630,7 @@ export default function CSRPartnershipEnquiry() {
                   </div>
 
                   {/* DIRECT CONTACT */}
+
                   <div className="mt-10 border-t border-white/20 pt-7">
 
                     <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-orange-300">
@@ -609,18 +638,20 @@ export default function CSRPartnershipEnquiry() {
                     </p>
 
                     {/* EMAIL */}
+
                     <a
-                      href="mailto:sakshamfoundationsmartskills@gmail.com"
+                      href={`mailto:${FOUNDATION_EMAIL}`}
                       className="csr-contact-link flex items-start gap-3 text-sm leading-6 text-white/85 transition-colors hover:text-white"
                     >
                       <Mail className="mt-1 h-4 w-4 shrink-0 text-orange-400" />
 
                       <span className="break-all">
-                        sakshamfoundationsmartskills@gmail.com
+                        {FOUNDATION_EMAIL}
                       </span>
                     </a>
 
                     {/* PHONE */}
+
                     <a
                       href="tel:+918830223458"
                       className="csr-contact-link mt-4 flex items-center gap-3 text-sm text-white/85 transition-colors hover:text-white"
@@ -639,9 +670,7 @@ export default function CSRPartnershipEnquiry() {
 
           </div>
 
-          {/* ================================= */}
           {/* RIGHT FORM PANEL */}
-          {/* ================================= */}
 
           <div className="lg:col-span-8">
 
@@ -654,6 +683,7 @@ export default function CSRPartnershipEnquiry() {
               <div className="csr-form-panel relative h-full rounded-b-2xl bg-white px-6 py-8 sm:px-9 sm:py-10 lg:rounded-r-2xl lg:rounded-bl-none lg:px-11 lg:py-12">
 
                 {/* FORM INTRO */}
+
                 <div className="mb-8 flex items-start gap-4">
 
                   <div className="csr-form-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
@@ -672,18 +702,19 @@ export default function CSRPartnershipEnquiry() {
 
                 </div>
 
-                {/* ================================= */}
                 {/* FORM */}
-                {/* ================================= */}
 
                 <form
                   onSubmit={handleSubmit}
                   className="space-y-6"
                 >
+
                   {/* TWO COLUMN FIELDS */}
+
                   <div className="grid gap-5 sm:grid-cols-2">
 
                     {/* ORGANIZATION */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-organization"
@@ -707,6 +738,7 @@ export default function CSRPartnershipEnquiry() {
                     </div>
 
                     {/* CONTACT PERSON */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-contact-person"
@@ -731,6 +763,7 @@ export default function CSRPartnershipEnquiry() {
                     </div>
 
                     {/* DESIGNATION */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-designation"
@@ -756,6 +789,7 @@ export default function CSRPartnershipEnquiry() {
                     </div>
 
                     {/* EMAIL */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-email"
@@ -780,6 +814,7 @@ export default function CSRPartnershipEnquiry() {
                     </div>
 
                     {/* MOBILE */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-mobile"
@@ -805,6 +840,7 @@ export default function CSRPartnershipEnquiry() {
                     </div>
 
                     {/* PARTNERSHIP TYPE */}
+
                     <div className="csr-field">
                       <label
                         htmlFor="csr-partnership-type"
@@ -842,6 +878,7 @@ export default function CSRPartnershipEnquiry() {
                   </div>
 
                   {/* PROJECT LOCATION */}
+
                   <div className="csr-field">
                     <label
                       htmlFor="csr-location"
@@ -855,6 +892,7 @@ export default function CSRPartnershipEnquiry() {
                     </label>
 
                     <div className="relative">
+
                       <MapPin className="pointer-events-none absolute left-4 top-[22px] h-4 w-4 text-slate-400" />
 
                       <input
@@ -867,10 +905,12 @@ export default function CSRPartnershipEnquiry() {
                         placeholder={t.locationPlaceholder}
                         className={`${inputClass} pl-11`}
                       />
+
                     </div>
                   </div>
 
                   {/* PROJECT REQUIREMENTS */}
+
                   <div className="csr-field">
                     <label
                       htmlFor="csr-requirements"
@@ -893,13 +933,12 @@ export default function CSRPartnershipEnquiry() {
                     />
                   </div>
 
-                  {/* ================================= */}
                   {/* SUBMIT SECTION */}
-                  {/* ================================= */}
 
                   <div className="flex flex-col gap-5 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
 
                     {/* PRIVACY NOTICE */}
+
                     <div className="flex items-start gap-2">
 
                       <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
@@ -910,18 +949,20 @@ export default function CSRPartnershipEnquiry() {
 
                     </div>
 
-                    {/* WHATSAPP SUBMIT BUTTON */}
+                    {/* GMAIL SUBMIT BUTTON */}
+
                     <button
                       type="submit"
-                      className="csr-whatsapp-btn group relative inline-flex min-h-12 items-center justify-center gap-3 overflow-hidden rounded-lg bg-orange-600 px-7 py-3 text-sm font-bold text-white shadow-[0_10px_25px_rgba(234,88,12,0.15)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-700 hover:shadow-[0_15px_35px_rgba(234,88,12,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                      className="csr-gmail-btn group relative inline-flex min-h-12 items-center justify-center gap-3 overflow-hidden rounded-lg bg-orange-600 px-7 py-3 text-sm font-bold text-white shadow-[0_10px_25px_rgba(234,88,12,0.15)] transition-all duration-300 hover:-translate-y-1 hover:bg-orange-700 hover:shadow-[0_15px_35px_rgba(234,88,12,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                     >
                       {/* MIRROR SHINE */}
+
                       <span
                         aria-hidden="true"
-                        className="csr-whatsapp-shine pointer-events-none absolute inset-0"
+                        className="csr-gmail-shine pointer-events-none absolute inset-0"
                       />
 
-                      <MessageCircle className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                      <Mail className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
 
                       <span className="relative z-10">
                         {t.submit}
@@ -932,45 +973,51 @@ export default function CSRPartnershipEnquiry() {
 
                   </div>
 
-                  {/* WHATSAPP INSTRUCTIONS */}
-                  <div className="rounded-xl border border-green-100 bg-green-50/70 px-4 py-3">
+                  {/* GMAIL INSTRUCTIONS */}
+
+                  <div className="rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3">
 
                     <div className="flex items-start gap-2">
-                      <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
 
-                      <p className="text-xs leading-6 text-green-800">
-                        {t.whatsappNotice}
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
+
+                      <p className="text-xs leading-6 text-blue-800">
+                        {t.gmailNotice}
                       </p>
+
                     </div>
 
                   </div>
 
-                  {/* WHATSAPP FALLBACK LINK */}
-                  {whatsappUrl && (
+                  {/* GMAIL FALLBACK LINK */}
+
+                  {gmailUrl && (
                     <div
                       role="status"
-                      className="csr-whatsapp-fallback rounded-xl border border-orange-200 bg-orange-50 px-4 py-4"
+                      className="csr-gmail-fallback rounded-xl border border-orange-200 bg-orange-50 px-4 py-4"
                     >
                       <p className="text-sm font-medium text-[#061B50]">
-                        {t.whatsappFallback}
+                        {t.gmailFallback}
                       </p>
 
                       <a
-                        href={whatsappUrl}
+                        href={gmailUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-orange-700 underline underline-offset-4 hover:text-orange-900"
                       >
-                        {t.whatsappFallbackLink}
+                        {t.gmailFallbackLink}
 
                         <ExternalLink className="h-4 w-4" />
                       </a>
+
                     </div>
                   )}
 
                 </form>
 
                 {/* BOTTOM NOTICE */}
+
                 <p className="mt-5 text-xs leading-6 text-slate-500">
                   {t.bottomNotice}
                 </p>
@@ -983,9 +1030,9 @@ export default function CSRPartnershipEnquiry() {
         </div>
       </div>
 
-      {/* ==================================== */}
-      {/* ANIMATIONS IN SAME FILE */}
-      {/* ==================================== */}
+      {/* ====================================
+          ANIMATIONS
+      ==================================== */}
 
       <style>{`
         /* BACKGROUND */
@@ -1129,9 +1176,9 @@ export default function CSRPartnershipEnquiry() {
           color: #ea580c;
         }
 
-        /* WHATSAPP BUTTON MIRROR SHINE */
+        /* GMAIL BUTTON SHINE */
 
-        #csr-enquiry .csr-whatsapp-shine {
+        #csr-enquiry .csr-gmail-shine {
           background: linear-gradient(
             110deg,
             transparent 20%,
@@ -1145,8 +1192,8 @@ export default function CSRPartnershipEnquiry() {
           transition: transform 850ms ease;
         }
 
-        #csr-enquiry .csr-whatsapp-btn:hover
-        .csr-whatsapp-shine {
+        #csr-enquiry .csr-gmail-btn:hover
+        .csr-gmail-shine {
           transform: translateX(160%);
         }
 
@@ -1164,7 +1211,7 @@ export default function CSRPartnershipEnquiry() {
           }
         }
 
-        #csr-enquiry .csr-whatsapp-fallback {
+        #csr-enquiry .csr-gmail-fallback {
           animation: csrFallbackEnter 500ms
             ease-out both;
         }
@@ -1187,17 +1234,16 @@ export default function CSRPartnershipEnquiry() {
           #csr-enquiry .csr-sidebar-icon,
           #csr-enquiry .csr-form-icon,
           #csr-enquiry .csr-focus-item,
-          #csr-enquiry .csr-whatsapp-fallback {
+          #csr-enquiry .csr-gmail-fallback {
             animation: none !important;
           }
 
           #csr-enquiry .csr-input,
-          #csr-enquiry .csr-whatsapp-shine {
+          #csr-enquiry .csr-gmail-shine {
             transition: none !important;
           }
         }
       `}</style>
-
     </section>
   );
 }

@@ -247,7 +247,6 @@ export default function Navbar() {
 
             <span className="hidden h-3 w-px bg-white/30 sm:block" />
 
-
           </div>
         </div>
       </div>
@@ -269,9 +268,10 @@ export default function Navbar() {
           <Link
             to="/"
             onClick={closeMenu}
-            className="saksham-navbar-logo group flex min-w-0 shrink-0 items-center gap-2 sm:gap-3"
+            className="saksham-navbar-logo group flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2"
             aria-label={t.logoLabel}
           >
+
             {/* LOGO IMAGE */}
             <div className="relative shrink-0 overflow-hidden">
               <img
@@ -287,30 +287,25 @@ export default function Navbar() {
               />
             </div>
 
-            {/* BRAND NAME */}
-            <div className="min-w-0">
+            {/* ================================= */}
+            {/* BRAND NAME - SINGLE LINE */}
+            {/* ================================= */}
 
+            <div className="min-w-0 shrink-0">
               <span
-                className={`block font-extrabold leading-none text-[#061B50] ${
+                className={`block whitespace-nowrap font-extrabold leading-none text-[#061B50] ${
                   language === "mr"
-                    ? "text-[21px] sm:text-[24px]"
-                    : "text-[18px] tracking-tight sm:text-[21px]"
+                    ? "text-[18px] sm:text-[23px] lg:text-[25px] 2xl:text-[27px]"
+                    : "text-[16px] tracking-tight sm:text-[21px] lg:text-[23px] 2xl:text-[25px]"
                 }`}
               >
-                {t.brandName}
+                {t.brandName}{" "}
+                <span className="text-green-700">
+                  {t.foundation}
+                </span>
               </span>
-
-              <span
-                className={`mt-1 block font-bold text-green-700 ${
-                  language === "mr"
-                    ? "text-[12px] sm:text-[14px]"
-                    : "text-[10px] uppercase tracking-[0.14em] sm:text-[11px]"
-                }`}
-              >
-                {t.foundation}
-              </span>
-
             </div>
+
           </Link>
 
           {/* ================================= */}
@@ -330,7 +325,7 @@ export default function Navbar() {
                   style={{
                     animationDelay: `${120 + index * 55}ms`,
                   }}
-                  className={`saksham-desktop-link group relative whitespace-nowrap rounded-lg px-2 py-2.5 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5 2xl:px-3 2xl:text-[15px] ${
+                  className={`saksham-desktop-link group relative whitespace-nowrap rounded-lg px-2 py-2.5 text-[12px] font-semibold transition-all duration-300 hover:-translate-y-0.5 2xl:px-3 2xl:text-[14px] ${
                     active
                       ? "bg-orange-50 text-orange-600"
                       : "text-[#061B50] hover:bg-slate-50 hover:text-orange-600"
@@ -363,8 +358,9 @@ export default function Navbar() {
             aria-current={
               isActive("/donate") ? "page" : undefined
             }
-            className="saksham-navbar-donate group relative hidden shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-lg bg-orange-600 px-3 py-3 text-[13px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-orange-700 hover:shadow-[0_12px_28px_rgba(234,88,12,0.25)] xl:inline-flex 2xl:gap-2 2xl:px-4 2xl:text-[15px]"
+            className="saksham-navbar-donate group relative hidden shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-lg bg-orange-600 px-3 py-3 text-[12px] font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-orange-700 hover:shadow-[0_12px_28px_rgba(234,88,12,0.25)] xl:inline-flex 2xl:gap-2 2xl:px-4 2xl:text-[14px]"
           >
+
             {/* MIRROR SHINE */}
             <span
               aria-hidden="true"
@@ -378,6 +374,7 @@ export default function Navbar() {
             </span>
 
             <ArrowUpRight className="relative z-10 h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+
           </Link>
 
           {/* ================================= */}
@@ -503,8 +500,6 @@ export default function Navbar() {
 
                   +91 88302 23458
                 </a>
-
-               
 
               </div>
 
