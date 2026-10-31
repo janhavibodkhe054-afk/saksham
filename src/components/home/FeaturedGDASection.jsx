@@ -435,7 +435,7 @@ export default function FeaturedGDASection() {
                 >
                   {/* ORIGINAL IMAGE */}
                   <img
-                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1100&q=85"
+                    src="/doctor.avif"
                     alt={
                       language === "mr"
                         ? "आरोग्यसेवा कौशल्य प्रशिक्षण"

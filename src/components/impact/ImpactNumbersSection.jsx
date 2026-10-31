@@ -198,7 +198,7 @@ export default function ImpactNumbersSection() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 -z-20">
         <img
-          src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1920&q=85"
+          src="/impact-no.avif"
           alt=""
           aria-hidden="true"
           loading="lazy"

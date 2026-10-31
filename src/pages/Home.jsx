@@ -8,6 +8,7 @@ import OurImpactSection from '../components/home/OurImpactSection'
 import WhyChooseSakshamSection from '../components/home/WhyChooseSakshamSection'
 import TrainingToEmploymentSection from '../components/home/TrainingToEmploymentSection'
 import CSRPartnershipCTA from '../components/home/CSRPartnershipCTA'
+import DiwaliDonationSection from '../components/home/DiwaliDonationSection'
 
 const Home = () => {
   return (
@@ -18,6 +19,7 @@ const Home = () => {
       <TrainingProgramsDarkSection/>
       <FeaturedGDASection/>
       <OurImpactSection/>
+      <DiwaliDonationSection/>
       <WhyChooseSakshamSection/>
       <TrainingToEmploymentSection/>
       <CSRPartnershipCTA/>

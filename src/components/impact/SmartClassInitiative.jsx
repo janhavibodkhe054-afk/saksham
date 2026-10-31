@@ -222,7 +222,7 @@ export default function SmartClassInitiative() {
               {/* IMAGE */}
               <div className="group overflow-hidden rounded-2xl bg-slate-100 shadow-[0_15px_45px_rgba(6,27,80,0.08)]">
                 <img
-                  src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1100&q=85"
+                  src="/impact.avif"
                   alt={t.imageAlt}
                   loading="lazy"
                   decoding="async"

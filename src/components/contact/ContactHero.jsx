@@ -41,7 +41,7 @@ export default function ContactHero() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 -z-20">
         <img
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1920&q=85"
+          src="/contact.avif"
           alt=""
           aria-hidden="true"
           className="h-full w-full object-cover object-center"
