@@ -10,21 +10,36 @@ import {
 
 import { useLanguage } from "../../context/LanguageContext";
 
+// ==========================================
+// ENGLISH + MARATHI TRANSLATIONS
+// ==========================================
 
 const translations = {
   en: {
     label: "DIWALI DONATION CAMPAIGN",
+
     title: "Make Someone's",
     highlight: "Diwali Brighter",
+
     description:
       "This Diwali, join Saksham Foundation's initiative to support underprivileged families with essential grocery kits and spread the joy of giving.",
 
     campaign: "One Family – One Grocery Kit",
 
-    points: [
-      "Essential grocery items for families in need",
-      "Sponsor a complete grocery kit",
-      "Contribute individually or with friends and family",
+   
+
+    socialLabel: "OUR SOCIAL ACTIVITIES",
+
+    socialTitle: "Supporting Communities Beyond Diwali",
+
+    socialDescription:
+      "Along with our Diwali Donation Campaign, Saksham Foundation works towards community welfare through initiatives focused on education, skill development, women empowerment and support for families in need.",
+
+    socialActivities: [
+      "Education & Skill Development",
+      "Women & Youth Empowerment",
+      "Community Welfare Initiatives",
+      "Support for Underprivileged Families",
     ],
 
     amountLabel: "Contribution for One Kit",
@@ -36,17 +51,29 @@ const translations = {
 
   mr: {
     label: "दिवाळी दान उत्सव",
+
     title: "या दिवाळीत उजळूया",
     highlight: "गरजूंचे जीवन!",
+
     description:
       "या दिवाळीत सक्षम फाउंडेशनच्या 'एक कुटुंब – एक धान्य किट' उपक्रमात सहभागी व्हा. गरजू कुटुंबांना जीवनावश्यक वस्तूंची मदत करून त्यांच्या चेहऱ्यावर आनंद फुलवूया.",
 
     campaign: "एक कुटुंब – एक धान्य किट",
 
-    points: [
-      "गरजू कुटुंबांसाठी जीवनावश्यक वस्तू",
-      "एका कुटुंबासाठी संपूर्ण धान्य किट प्रायोजित करा",
-      "वैयक्तिक किंवा मित्रपरिवारासह योगदान द्या",
+    
+
+    socialLabel: "आमचे सामाजिक उपक्रम",
+
+    socialTitle: "दिवाळीपुरतेच नाही, समाजासाठी कायम!",
+
+    socialDescription:
+      "दिवाळी दान उत्सवासोबतच सक्षम फाउंडेशन शिक्षण, कौशल्य विकास, महिला सक्षमीकरण आणि गरजू कुटुंबांच्या मदतीसाठी विविध सामाजिक उपक्रम राबविण्याच्या दिशेने कार्यरत आहे.",
+
+    socialActivities: [
+      "शिक्षण व कौशल्य विकास",
+      "महिला व युवक सक्षमीकरण",
+      "समाजकल्याण उपक्रम",
+      "गरजू कुटुंबांना मदत",
     ],
 
     amountLabel: "एका किटसाठी योगदान",
@@ -57,16 +84,32 @@ const translations = {
   },
 };
 
+// ==========================================
+// MAIN COMPONENT
+// ==========================================
+
 export default function DiwaliDonationSection() {
   const { language } = useLanguage();
+
   const t = translations[language] || translations.en;
 
   const sectionRef = useRef(null);
+
   const [visible, setVisible] = useState(false);
+
+  // ========================================
+  // SCROLL REVEAL ANIMATION
+  // ========================================
 
   useEffect(() => {
     const element = sectionRef.current;
+
     if (!element) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setVisible(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -85,14 +128,19 @@ export default function DiwaliDonationSection() {
     return () => observer.disconnect();
   }, []);
 
+  // ========================================
+  // WHATSAPP MESSAGE
+  // ========================================
+
   const whatsappMessage =
     language === "mr"
       ? "नमस्कार, मला सक्षम फाउंडेशनच्या दिवाळी दान उत्सवातील 'एक कुटुंब – एक धान्य किट' उपक्रमात सहभागी व्हायचे आहे. कृपया अधिक माहिती द्या."
       : "Hello, I would like to support Saksham Foundation's Diwali Donation Campaign – One Family, One Grocery Kit. Please share more information.";
 
-  const whatsappUrl = `https://wa.me/918830223458?text=${encodeURIComponent(
-    whatsappMessage
-  )}`;
+  const whatsappUrl =
+    `https://wa.me/918830223458?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
 
   return (
     <section
@@ -100,7 +148,9 @@ export default function DiwaliDonationSection() {
       ref={sectionRef}
       className="relative overflow-hidden bg-[#FFF9F0] py-14 sm:py-16 lg:py-20"
     >
-      {/* BACKGROUND DECORATION */}
+      {/* ====================================
+          BACKGROUND DECORATION
+      ==================================== */}
 
       <div
         aria-hidden="true"
@@ -115,7 +165,9 @@ export default function DiwaliDonationSection() {
 
         <div className="grid items-center gap-9 lg:grid-cols-2 lg:gap-14">
 
-          {/* LEFT SIDE - FULL POSTER */}
+          {/* ====================================
+              LEFT SIDE - FULL POSTER
+          ==================================== */}
 
           <div
             className={`transition-all duration-1000 ease-out ${
@@ -137,7 +189,9 @@ export default function DiwaliDonationSection() {
             </div>
           </div>
 
-          {/* RIGHT SIDE - CONTENT */}
+          {/* ====================================
+              RIGHT SIDE - CONTENT
+          ==================================== */}
 
           <div
             className={`transition-all delay-150 duration-1000 ease-out ${
@@ -161,11 +215,13 @@ export default function DiwaliDonationSection() {
             {/* HEADING */}
 
             <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-[#061B50] sm:text-4xl lg:text-[42px]">
+
               {t.title}
 
               <span className="mt-1 block text-orange-600">
                 {t.highlight}
               </span>
+
             </h2>
 
             {/* DESCRIPTION */}
@@ -174,38 +230,67 @@ export default function DiwaliDonationSection() {
               {t.description}
             </p>
 
-            {/* CAMPAIGN NAME */}
+           
+           
+            
 
-            <div className="mt-6 inline-flex items-center gap-3 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3">
+            {/* ====================================
+                SOCIAL ACTIVITIES
+            ==================================== */}
 
-              <Gift className="h-5 w-5 shrink-0 text-orange-600" />
+            <div className="mt-8 rounded-xl border border-orange-100 bg-white/85 p-5 shadow-[0_8px_25px_rgba(6,27,80,0.04)] sm:p-6">
 
-              <span className="text-sm font-bold text-[#061B50]">
-                {t.campaign}
-              </span>
+              {/* LABEL */}
+
+              <div className="mb-3 flex items-center gap-2">
+
+                <HeartHandshake className="h-5 w-5 text-orange-600" />
+
+                <span className="text-xs font-bold uppercase tracking-[0.12em] text-orange-600">
+                  {t.socialLabel}
+                </span>
+
+              </div>
+
+              {/* TITLE */}
+
+              <h3 className="text-lg font-bold leading-snug text-[#061B50]">
+                {t.socialTitle}
+              </h3>
+
+              {/* DESCRIPTION */}
+
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                {t.socialDescription}
+              </p>
+
+              {/* SOCIAL ACTIVITY LIST */}
+
+              <div className="mt-5 grid gap-x-4 gap-y-3 sm:grid-cols-2">
+
+                {t.socialActivities.map(
+                  (activity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-2"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
+
+                      <span className="text-xs font-medium leading-5 text-slate-700">
+                        {activity}
+                      </span>
+
+                    </div>
+                  )
+                )}
+
+              </div>
 
             </div>
 
-            {/* KEY POINTS */}
-
-            <div className="mt-7 space-y-4">
-
-              {t.points.map((point, index) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-3"
-                >
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-
-                  <span className="text-sm leading-6 text-slate-700">
-                    {point}
-                  </span>
-                </div>
-              ))}
-
-            </div>
-
-            {/* DONATION AMOUNT */}
+            {/* ====================================
+                DONATION AMOUNT
+            ==================================== */}
 
             <div className="mt-8 flex items-center gap-4 border-t border-orange-200/70 pt-6">
 
@@ -214,6 +299,7 @@ export default function DiwaliDonationSection() {
               </div>
 
               <div>
+
                 <p className="text-xs font-medium text-slate-500">
                   {t.amountLabel}
                 </p>
@@ -221,13 +307,18 @@ export default function DiwaliDonationSection() {
                 <p className="mt-1 text-2xl font-extrabold text-[#061B50]">
                   {t.amount}
                 </p>
+
               </div>
 
             </div>
 
-            {/* CTA */}
+            {/* ====================================
+                CALL TO ACTION
+            ==================================== */}
 
             <div className="mt-7 flex flex-wrap items-center gap-5">
+
+              {/* WHATSAPP BUTTON */}
 
               <a
                 href={whatsappUrl}
@@ -237,10 +328,13 @@ export default function DiwaliDonationSection() {
               >
                 <HeartHandshake className="h-5 w-5" />
 
-                {t.button}
+                <span>{t.button}</span>
 
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+
               </a>
+
+              {/* CONTACT NUMBER */}
 
               <a
                 href="tel:+918830223458"
@@ -256,19 +350,62 @@ export default function DiwaliDonationSection() {
           </div>
 
         </div>
+
       </div>
 
+      {/* ====================================
+          STYLES & ANIMATIONS
+      ==================================== */}
+
       <style>{`
+
+        /* IMAGE - NEVER CROP */
+
         #diwali-donation img {
           max-width: 100%;
           height: auto;
+          object-fit: contain;
         }
+
+        /* BACKGROUND ANIMATIONS */
+
+        @keyframes diwaliBgFloat {
+          0%, 100% {
+            transform: translate(0, 0);
+          }
+
+          50% {
+            transform: translate(20px, -15px);
+          }
+        }
+
+        #diwali-donation .blur-3xl {
+          animation: diwaliBgFloat 12s
+            ease-in-out infinite;
+        }
+
+        /* BUTTON HOVER */
+
+        #diwali-donation a {
+          transition:
+            color 300ms ease,
+            background-color 300ms ease,
+            transform 300ms ease,
+            box-shadow 300ms ease;
+        }
+
+        /* REDUCED MOTION */
 
         @media (prefers-reduced-motion: reduce) {
           #diwali-donation .transition-all {
             transition: none !important;
           }
+
+          #diwali-donation .blur-3xl {
+            animation: none !important;
+          }
         }
+
       `}</style>
     </section>
   );
