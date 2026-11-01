@@ -494,8 +494,8 @@ export default function Footer() {
           <p className="text-xs leading-6 text-blue-100/70">
             © {formatYear(currentYear, language)}{" "}
             {language === "mr"
-              ? "सक्षम फाउंडेशन."
-              : "Saksham Foundation."}{" "}
+              ? "सक्षम फाउंडेशन"
+              : "Saksham Foundation"}{" "}
             {t.copyright}
           </p>
 
