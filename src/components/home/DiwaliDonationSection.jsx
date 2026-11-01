@@ -183,7 +183,7 @@ export default function DiwaliDonationSection() {
       ? "नमस्कार, मला सक्षम फाउंडेशनच्या 'एक कुटुंब – एक धान्य किट' या दिवाळी दान उत्सव उपक्रमात सहभागी व्हायचे आहे. कृपया अधिक माहिती द्या."
       : "Hello, I would like to support Saksham Foundation's One Family – One Grocery Kit Diwali Donation Campaign. Please share more information.";
 
-  const whatsappUrl = `https://wa.me/918830023458?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/918830223458?text=${encodeURIComponent(
     whatsappMessage
   )}`;
 
